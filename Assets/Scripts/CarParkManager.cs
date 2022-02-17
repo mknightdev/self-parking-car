@@ -37,17 +37,18 @@ public class CarParkManager : MonoBehaviour
         int randomValue = 0;
         List<int> randomValueList = new List<int>();
 
-
+        // Loop until we have equal amount of values to cars
         while (randomValueList.Count != numOfCars)
         {
+            // Generate random value
             randomValue = Random.Range(0, parkingSlots.Count);
 
+            // If we don't have it, add it to the list
             if (!randomValueList.Contains(randomValue))
             {
                 randomValueList.Add(randomValue);
             }
         }
-
 
         // Iterate and turn off target object based on how many cars already parked
         for (int i = 0; i < numOfCars; i++)
