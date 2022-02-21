@@ -5,12 +5,17 @@ using UnityEngine;
 
 public class CarLocomotion : MonoBehaviour
 {
+    [Header("Car Park")]
+    public Transform parkingSlots;
+    public Transform goalParkingSlot;
+
     private float horizontalInput;
     private float verticalInput;
     private float steerAngle;
     private float currentBreakForce;
     private bool isBreaking;
 
+    [Header("Car Settings")]
     [SerializeField] private float motorForce;
     [SerializeField] private float breakForce;
     [SerializeField] private float maxAngle;
@@ -24,6 +29,26 @@ public class CarLocomotion : MonoBehaviour
     [SerializeField] private Transform frontRTransform;
     [SerializeField] private Transform backLTransform;
     [SerializeField] private Transform backRTransform;
+
+    private void Start()
+    {
+        for (int i = 0; i < parkingSlots.childCount; i++)
+        {
+            // Check if gameobject is active
+            if (parkingSlots.GetChild(i).GetChild(0).gameObject.activeSelf)
+            {
+                // Calculate the distance for each parking slot
+                var newDistance = Vector3.Distance(this.transform.position, parkingSlots.GetChild(i).GetChild(0).position);
+                var distance = 0.0f;
+                if (distance == 0.0f || newDistance < distance)
+                {
+                    // Set the distance to the closest distance
+                    distance = newDistance;
+                    goalParkingSlot = parkingSlots.GetChild(i).GetChild(0);
+                }
+            }
+        }
+    }
 
     private void FixedUpdate()
     {
@@ -53,6 +78,7 @@ public class CarLocomotion : MonoBehaviour
 
     private void ApplyBreaking()
     {
+        Debug.Log("Braking!");
         frontLCollider.brakeTorque = currentBreakForce;
         frontRCollider.brakeTorque = currentBreakForce;
         backLCollider.brakeTorque = currentBreakForce;
@@ -83,5 +109,14 @@ public class CarLocomotion : MonoBehaviour
         wheelCollider.GetWorldPose(out pos, out rot);
         wheelTransform.rotation = rot;
         wheelTransform.position = pos;
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("goal"))
+        {
+            // Give reward
+            Debug.Log("goal reached");
+        }
     }
 }
