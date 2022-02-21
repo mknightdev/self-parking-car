@@ -30,6 +30,7 @@ public class CarLocomotion : MonoBehaviour
     [SerializeField] private Transform backLTransform;
     [SerializeField] private Transform backRTransform;
 
+
     private void Start()
     {
         for (int i = 0; i < parkingSlots.childCount; i++)

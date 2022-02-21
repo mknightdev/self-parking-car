@@ -13,6 +13,9 @@ public class CarParkManager : MonoBehaviour
     [Header("Car Settings")]
     public List<GameObject> cars;
 
+    [Header("Debugger")]
+    [SerializeField] private SceneRestarter sceneRestarter;
+
     void Start()
     {
         SetupCarPark();
@@ -28,11 +31,10 @@ public class CarParkManager : MonoBehaviour
             parkingSlots.Add(m_parkingSlots.GetChild(i).gameObject);
         }
 
-
-
         // TODO: Test functionality
-        if (numOfCars > m_parkingSlots.childCount) { return; }
+        //if (numOfCars > m_parkingSlots.childCount) { return; }
 
+        numOfCars = Random.Range(m_parkingSlots.childCount / 2, m_parkingSlots.childCount - 1);
 
         int randomValue = 0;
         List<int> randomValueList = new List<int>();
@@ -65,6 +67,9 @@ public class CarParkManager : MonoBehaviour
 
         // Clear the list when all cars have spawned
         randomValueList.Clear();
+
+        sceneRestarter.numOfCarsText.text = $"Number of Cars: {numOfCars}";
+        sceneRestarter.freeSlotsText.text = $"Free Slots: {m_parkingSlots.childCount - numOfCars}";
     }
 
     void Update()

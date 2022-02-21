@@ -9,6 +9,9 @@ public class SceneRestarter : MonoBehaviour
     public int counter = 0;
     public TextMeshProUGUI counterText;
 
+    public TextMeshProUGUI numOfCarsText;
+    public TextMeshProUGUI freeSlotsText;
+
     private void Start()
     {
         counter = PlayerPrefs.GetInt("counter", 1);
