@@ -17,7 +17,10 @@ public class RollerAgent : Agent
     public MeshRenderer groundRenderer;
     public Material groundMaterial;
 
-    public TextMeshProUGUI episodeCountText;
+    public TextMeshProUGUI completedEpisodeCountText;
+    public TextMeshProUGUI cumalativeRewardCountText;
+    public TextMeshProUGUI stepCountText;
+
     private int episodeCount;
 
     // Start is called before the first frame update
@@ -35,18 +38,19 @@ public class RollerAgent : Agent
 
     public override void OnEpisodeBegin()
     {
-        episodeCountText.text = $"Episode: {CompletedEpisodes}";
+        completedEpisodeCountText.text = $"{CompletedEpisodes}";
+        cumalativeRewardCountText.text = $"{GetCumulativeReward()}";
+        stepCountText.text = $"{StepCount}";
 
         // If the agent fell, zero its momentum
         if (this.transform.localPosition.y < 0)
         {
             this.rb.angularVelocity = Vector3.zero;
             this.rb.velocity = Vector3.zero;
-            this.transform.localPosition = new Vector3(0, 0.5f, 0);
         }
 
-        // Move the target to a new spot
-        target.localPosition = new Vector3(Random.value * 8 - 4, 0.5f, Random.value * 8 - 4);
+        // Move agent back to starting position
+        this.transform.localPosition = new Vector3(0, 0.5f, -8f);
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -57,7 +61,7 @@ public class RollerAgent : Agent
 
         // Agent velocity
         sensor.AddObservation(rb.velocity.x);
-        sensor.AddObservation(rb.velocity.y);
+        sensor.AddObservation(rb.velocity.z);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
