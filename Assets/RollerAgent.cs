@@ -4,10 +4,21 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
+using TMPro;
 
 public class RollerAgent : Agent
 {
+
+    public float forceMultiplier = 10;
+    public Transform target;
     private Rigidbody rb;
+
+    public RollerSettings rollerSettings;
+    public MeshRenderer groundRenderer;
+    public Material groundMaterial;
+
+    public TextMeshProUGUI episodeCountText;
+    private int episodeCount;
 
     // Start is called before the first frame update
     void Start()
@@ -15,10 +26,17 @@ public class RollerAgent : Agent
         rb = GetComponent<Rigidbody>(); 
     }
 
-    public Transform target;
+    public override void Initialize()
+    {
+        episodeCount = 0;
+        rollerSettings = FindObjectOfType<RollerSettings>();
+        groundMaterial = groundRenderer.material;
+    }
 
     public override void OnEpisodeBegin()
     {
+        episodeCountText.text = $"Episode: {CompletedEpisodes}";
+
         // If the agent fell, zero its momentum
         if (this.transform.localPosition.y < 0)
         {
@@ -42,7 +60,6 @@ public class RollerAgent : Agent
         sensor.AddObservation(rb.velocity.y);
     }
 
-    public float forceMultiplier = 10;
     public override void OnActionReceived(ActionBuffers actions)
     {
         // Actions, size = 2
@@ -57,13 +74,16 @@ public class RollerAgent : Agent
         // Target reached
         if (distance < 1.42f)
         {
-            SetReward(1.0f);
+            SetReward(1f);
             EndEpisode();
+            StartCoroutine(SwapMaterial(rollerSettings.winMat, 2.0f));
         }
         else if (this.transform.localPosition.y < 0)
         {
             // Fell off platform
+            SetReward(-0.25f);
             EndEpisode();
+            StartCoroutine(SwapMaterial(rollerSettings.failMat, 2.0f));
         }
     }
 
@@ -72,5 +92,12 @@ public class RollerAgent : Agent
         var continuousActionsOut = actionsOut.ContinuousActions;
         continuousActionsOut[0] = Input.GetAxis("Horizontal");
         continuousActionsOut[1] = Input.GetAxis("Vertical");
+    }
+
+    IEnumerator SwapMaterial(Material mat, float time)
+    {
+        groundRenderer.material = mat;
+        yield return new WaitForSeconds(time);  // wait for 2 seconds
+        groundRenderer.material = groundMaterial;
     }
 }
