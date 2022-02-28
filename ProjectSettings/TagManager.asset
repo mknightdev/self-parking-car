@@ -8,6 +8,8 @@ TagManager:
   - car
   - target
   - obstacle
+  - wall
+  - spot
   layers:
   - Default
   - TransparentFX

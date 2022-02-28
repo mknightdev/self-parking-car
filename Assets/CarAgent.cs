@@ -62,6 +62,10 @@ public class CarAgent : Agent
 
         sensor.AddObservation(this.agentRb.velocity.x);
         sensor.AddObservation(this.agentRb.velocity.z);
+
+        // Speed
+        sensor.AddObservation(this.moveSpeed);
+
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -74,19 +78,16 @@ public class CarAgent : Agent
 
         // Rewards
         float distance = Vector3.Distance(this.transform.localPosition, target.position);
-        //Debug.Log($"Distance: {distance}");
 
-        if (distance < oldDistance)
+        if (distance < 1.5f)
         {
             // If the agent has got closer, reward it
-            SetReward(1f);
-            oldDistance = distance;
+            SetReward(2.0f);
         }
         else
         {
             // If the agent hasn't got closer, punish it
-            SetReward(-0.1f);
-            oldDistance = distance;
+            SetReward(-0.25f);
         }
 
         // Punish if it falls off the platform
@@ -116,9 +117,25 @@ public class CarAgent : Agent
         {
             GlobalStats.success += 1;
 
-            SetReward(5f);
+            SetReward(10.0f);
             EndEpisode();
             StartCoroutine(SwapMaterial(envSettings.winMat, 2.0f));
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("wall"))
+        {
+            SetReward(-1.0f);
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.transform.CompareTag("wall"))
+        {
+            SetReward(-5.0f);
         }
     }
 
