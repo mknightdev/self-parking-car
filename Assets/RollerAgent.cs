@@ -17,12 +17,6 @@ public class RollerAgent : Agent
     public MeshRenderer groundRenderer;
     public Material groundMaterial;
 
-    public TextMeshProUGUI completedEpisodeCountText;
-    public TextMeshProUGUI cumalativeRewardCountText;
-    public TextMeshProUGUI stepCountText;
-
-    private int episodeCount;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -31,16 +25,16 @@ public class RollerAgent : Agent
 
     public override void Initialize()
     {
-        episodeCount = 0;
         rollerSettings = FindObjectOfType<RollerSettings>();
         groundMaterial = groundRenderer.material;
     }
 
     public override void OnEpisodeBegin()
     {
-        completedEpisodeCountText.text = $"{CompletedEpisodes}";
-        cumalativeRewardCountText.text = $"{GetCumulativeReward()}";
-        stepCountText.text = $"{StepCount}";
+        GlobalStats.episode += 1;
+
+        //cumalativeRewardCountText.text = $"{this.cumalativeRewardCount}";
+        //stepCountText.text = $"{this.stepCount}";
 
         // If the agent fell, zero its momentum
         if (this.transform.localPosition.y < 0)
@@ -50,7 +44,7 @@ public class RollerAgent : Agent
         }
 
         // Move agent back to starting position
-        this.transform.localPosition = new Vector3(0, 0.5f, -8f);
+        this.transform.localPosition = new Vector3(0, 0f, -8f);
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -74,18 +68,37 @@ public class RollerAgent : Agent
         
         // Rewards
         float distance = Vector3.Distance(this.transform.localPosition, target.localPosition);
+        Debug.Log($"Distance: {distance}");
         
         // Target reached
         if (distance < 1.42f)
         {
+            GlobalStats.success += 1;
+
             SetReward(1f);
             EndEpisode();
             StartCoroutine(SwapMaterial(rollerSettings.winMat, 2.0f));
         }
         else if (this.transform.localPosition.y < 0)
         {
+            GlobalStats.fail += 1;
+
             // Fell off platform
             SetReward(-0.25f);
+            EndEpisode();
+            StartCoroutine(SwapMaterial(rollerSettings.failMat, 2.0f));
+        }
+
+        GlobalStats.UpdateText();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.CompareTag("obstacle"))
+        {
+            GlobalStats.fail += 1;
+
+            SetReward(-0.50f);
             EndEpisode();
             StartCoroutine(SwapMaterial(rollerSettings.failMat, 2.0f));
         }
