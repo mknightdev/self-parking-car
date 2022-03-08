@@ -188,7 +188,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 208286098088572540}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -2.75}
+  m_LocalPosition: {x: 0, y: 0, z: -8}
   m_LocalScale: {x: 1.5, y: 1, z: 3}
   m_Children:
   - {fileID: 1397720184}
@@ -279,9 +279,9 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 8d46c50424c5a794eb47286cc1b61459, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 2
+  m_BehaviorType: 0
   m_BehaviorName: CarPractice
   TeamId: 0
   m_UseChildSensors: 1
@@ -303,10 +303,10 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 4000
+  MaxStep: 2000
   envSettings: {fileID: 0}
   moveSpeed: 1
-  target: {fileID: 0}
+  target: {fileID: 208286097838780696}
   targets:
   - {fileID: 208286097838780696}
   - {fileID: 2238899795473993765}
@@ -794,6 +794,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 208286098153046167}
     m_Modifications:
+    - target: {fileID: 1028965669384566244, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1028965669859479129, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1028965669955491393, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -804,7 +812,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1028965669955491393, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.3
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1028965669955491393, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -842,9 +850,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Target
       objectReference: {fileID: 0}
+    - target: {fileID: 1028965670514323972, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1028965670523426935, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.89999986
+      objectReference: {fileID: 0}
     - target: {fileID: 1523089072662529712, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
@@ -877,6 +893,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 208286098153046167}
     m_Modifications:
+    - target: {fileID: 1028965669384566244, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1028965669859479129, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1028965669955491392, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1028965669955491393, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -887,7 +915,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1028965669955491393, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.3
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1028965669955491393, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -925,9 +953,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Target (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1028965669955491399, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1028965670514323972, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1028965670523426935, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.9
+      objectReference: {fileID: 0}
     - target: {fileID: 1523089072662529712, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6410422355120490611, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.38
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}

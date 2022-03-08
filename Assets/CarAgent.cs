@@ -17,12 +17,10 @@ public class CarAgent : Agent
 
     private MeshRenderer floorRend;
     private Material floorMat;
-    private float oldDistance = 0.0f;
     private float disFromGoal = 0.0f;
     private Vector3 defaultPos;
 
     private NPCManager[] npcManagers;
-
 
     private void Start()
     {
@@ -38,20 +36,20 @@ public class CarAgent : Agent
         //target = this.transform.parent.Find("Target").transform;
 
         // Get target
-        target = targets[Random.Range(0, targets.Count)];
-        target.Find("ParkingSpot").Find("Car").gameObject.SetActive(false); // Hide car
+        //target = targets[Random.Range(0, targets.Count)];
+        //target.Find("ParkingSpot").Find("Car").gameObject.SetActive(false); // Hide car
 
 
-        for (int i = 0; i < targets.Count; i++)
-        {
-            // Hide other targets
-            if (target != targets[i])
-            {
-                // Hide the target mesh and collider
-                targets[i].GetComponent<BoxCollider>().enabled = false;
-                targets[i].GetComponent<MeshRenderer>().enabled = false;
-            }
-        }
+        //for (int i = 0; i < targets.Count; i++)
+        //{
+        //    // Hide other targets
+        //    if (target != targets[i])
+        //    {
+        //        // Hide the target mesh and collider
+        //        targets[i].GetComponent<BoxCollider>().enabled = false;
+        //        targets[i].GetComponent<MeshRenderer>().enabled = false;
+        //    }
+        //}
 
         //Debug.Log($"TargetLocal: {target.position}");
 
@@ -102,36 +100,55 @@ public class CarAgent : Agent
     public override void OnActionReceived(ActionBuffers actions)
     {
         // Actions, size = 2
+        // Moving
         Vector3 controlSignal = Vector3.zero;
         controlSignal.x = actions.ContinuousActions[0];
         controlSignal.z = actions.ContinuousActions[1];
         agentRb.AddForce(controlSignal * moveSpeed, ForceMode.VelocityChange);
 
+        float lastDistance = Vector3.Distance(this.transform.localPosition, target.localPosition);
+
         // Rewards
         disFromGoal = Vector3.Distance(this.transform.localPosition, target.localPosition);
-        //Debug.Log($"Distance: {distance}");
 
-        // Set initial old distance 
-        if (oldDistance == 0) { oldDistance = disFromGoal; }
+        if (disFromGoal < lastDistance)
+        {
+            SetReward(0.01f);
+        }
 
-        if (disFromGoal < oldDistance)
+
+        float disFromGoalX = Mathf.Abs(this.transform.localPosition.x - target.localPosition.x);
+        float disFromGoalZ = Mathf.Abs(this.transform.localPosition.z - target.localPosition.z);
+        Debug.Log($"Distance X: {disFromGoalX}");
+        Debug.Log($"Distance Z: {disFromGoalZ}");
+
+
+
+        float threshold = 5f;
+        if (disFromGoalZ < threshold)
         {
             // If the agent has got closer, reward it
-            AddReward(1.0f);
-            oldDistance = disFromGoal;  // Set the closer distance as new distance
+            SetReward(1.0f);
         }
-        else
+
+        if (disFromGoalX < 0.15f && disFromGoalZ < 2.5f)
         {
-            AddReward(-0.10f);
-            oldDistance = disFromGoal;  // Update our last distance 
+            SetReward(1.0f);
         }
+
+        // Punish for being outside of 2.5 
+        if (disFromGoalX > 2.5f)
+        {
+            SetReward(-0.1f);
+        }
+        
        
         // Punish if it falls off the platform
         if (this.transform.localPosition.y < -1.0f)
         {
             GlobalStats.fail += 1;
 
-            AddReward(-0.25f);
+            SetReward(-0.25f);
             EndEpisode();
             StartCoroutine(SwapMaterial(envSettings.failMat, 2.0f));
         }
@@ -153,7 +170,7 @@ public class CarAgent : Agent
         {
             GlobalStats.success += 1;
 
-            AddReward(5.0f);
+            SetReward(5.0f);
             EndEpisode();
             StartCoroutine(SwapMaterial(envSettings.winMat, 2.0f));
         }
@@ -163,17 +180,12 @@ public class CarAgent : Agent
     {
         if (collision.transform.CompareTag("wall"))
         {
-            AddReward(-0.5f);
-        }
-
-        if (collision.transform.CompareTag("line"))
-        {
-            AddReward(-0.125f);
+            SetReward(-0.5f);
         }
 
         if (collision.transform.CompareTag("car"))
         {
-            AddReward(-1.0f);
+            SetReward(-1.0f);
         }
     }
 
@@ -181,17 +193,12 @@ public class CarAgent : Agent
     {
         if (collision.transform.CompareTag("wall"))
         {
-            AddReward(-1.0f);
-        }
-
-        if (collision.transform.CompareTag("line"))
-        {
-            AddReward(-0.25f);
+            SetReward(-1.0f);
         }
 
         if (collision.transform.CompareTag("car"))
         {
-            AddReward(-2.0f);
+            SetReward(-2.0f);
         }
     }
 
