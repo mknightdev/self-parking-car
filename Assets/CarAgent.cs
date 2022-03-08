@@ -22,6 +22,8 @@ public class CarAgent : Agent
     private bool startTimer = false;
     private float timer = 0.0f;
 
+    public List<Transform> targets;
+
     private void Start()
     {
         // Get the agent's rigidbody
@@ -33,7 +35,7 @@ public class CarAgent : Agent
         GlobalStats.UpdateText();
 
         // Get target
-        target = this.transform.parent.Find("Target").transform;
+        //target = this.transform.parent.Find("Target").transform;
         //Debug.Log($"TargetLocal: {target.position}");
 
         // Get the environment settings
@@ -42,6 +44,16 @@ public class CarAgent : Agent
         // Get the floor
         floorRend = this.transform.parent.Find("Floor").GetComponent<MeshRenderer>();
         floorMat = floorRend.material;
+
+        // Find all potential targets
+        for (int i = 0; i < this.transform.parent.childCount; i++)
+        {
+            // Compare name
+            if (this.transform.parent.GetChild(i).name == "Target")
+            {
+                targets.Add(this.transform.parent.GetChild(i));
+            }
+        }
     }
 
     public override void OnEpisodeBegin()
@@ -55,6 +67,23 @@ public class CarAgent : Agent
         // Zero the velocity
         this.agentRb.velocity = Vector3.zero;
         this.agentRb.angularVelocity = Vector3.zero;
+
+        // Choose random target
+        target = targets[Random.Range(0, targets.Count)];
+        for (int i = 0; i < targets.Count; i++)
+        {
+            if (target != targets[i])
+            {
+                // Hide mesh renderer and box collider 
+                targets[i].GetComponent<MeshRenderer>().enabled = false;
+                targets[i].GetComponent<BoxCollider>().enabled = false;
+            }
+            else
+            {
+                target.GetComponent<MeshRenderer>().enabled = true;
+                target.GetComponent<BoxCollider>().enabled = true;
+            }
+        }
     }
 
     public override void CollectObservations(VectorSensor sensor)
