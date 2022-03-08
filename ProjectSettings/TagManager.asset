@@ -10,6 +10,7 @@ TagManager:
   - obstacle
   - wall
   - spot
+  - line
   layers:
   - Default
   - TransparentFX
