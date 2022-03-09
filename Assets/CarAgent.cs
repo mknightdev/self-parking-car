@@ -7,6 +7,8 @@ using Unity.MLAgents.Actuators;
 
 public class CarAgent : Agent
 {
+    public CarLocomotion carLocomotion;
+
     public EnvSettings envSettings;
 
     public float moveSpeed;
@@ -61,7 +63,7 @@ public class CarAgent : Agent
         GlobalStats.episode += 1;
 
         // Move agent back to starting position
-        this.transform.localPosition = new Vector3(0.0f, 0.0f, -8.0f);
+        this.transform.localPosition = new Vector3(0.0f, 0.5f, -6.5f);
         this.transform.localRotation = Quaternion.identity;
 
         // Zero the velocity
@@ -122,7 +124,10 @@ public class CarAgent : Agent
         Vector3 controlSignal = Vector3.zero;
         controlSignal.x = actions.ContinuousActions[0];
         controlSignal.z = actions.ContinuousActions[1];
-        agentRb.AddForce(controlSignal * moveSpeed, ForceMode.VelocityChange);
+        //agentRb.AddForce(controlSignal * moveSpeed, ForceMode.VelocityChange);
+
+        carLocomotion.Accelerate(controlSignal.z);
+        carLocomotion.Steer(controlSignal.x);
 
         // Rewards
         float distance = Vector3.Distance(this.transform.localPosition, target.localPosition);

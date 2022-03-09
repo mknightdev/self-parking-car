@@ -28,7 +28,7 @@ public class CarLocomotion : MonoBehaviour
     private void FixedUpdate()
     {
         // W and S for forward and reverse
-        currentAcceleration = acceleration * Input.GetAxis("Vertical");
+        //currentAcceleration = acceleration * Input.GetAxis("Vertical");
 
         // Apply brake on space
         if (Input.GetKey(KeyCode.Space))
@@ -50,7 +50,7 @@ public class CarLocomotion : MonoBehaviour
         backLeft.brakeTorque = currentBrakeForce;
 
         // Steering
-        currentTurnAngle = maxTurnAngle * Input.GetAxis("Horizontal");
+        //currentTurnAngle = maxTurnAngle * Input.GetAxis("Horizontal");
         frontLeft.steerAngle = currentTurnAngle;
         frontRight.steerAngle = currentTurnAngle;
 
@@ -58,6 +58,16 @@ public class CarLocomotion : MonoBehaviour
         UpdateWheel(frontLeft, frontLeftTransform);
         UpdateWheel(backRight, backRightTransform);
         UpdateWheel(backLeft, backLeftTransform);
+    }
+
+    public void Accelerate(float value)
+    {
+        currentAcceleration = acceleration * value;
+    }
+
+    public void Steer(float value)
+    {
+        currentTurnAngle = maxTurnAngle * value;
     }
 
     void UpdateWheel(WheelCollider col, Transform trans)
