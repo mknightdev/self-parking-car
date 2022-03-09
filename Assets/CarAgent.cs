@@ -195,7 +195,8 @@ public class CarAgent : Agent
 
         if (collision.transform.CompareTag("car"))
         {
-            SetReward(-0.25f);
+            Debug.Log("Collision Enter");
+            SetReward(-0.1f);
         }
     }
 
@@ -208,7 +209,8 @@ public class CarAgent : Agent
 
         if (collision.transform.CompareTag("car"))
         {
-            SetReward(-0.5f);
+            Debug.Log("Collision Stay");
+            SetReward(-0.01f);
         }
     }
 
