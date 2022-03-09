@@ -279,7 +279,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 288d9751d6576be459037a9fd43f143a, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 67e8f560f69e13e43b1ca02c586321c8, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 2
   m_BehaviorName: CarPractice
@@ -355,6 +355,7 @@ MonoBehaviour:
   - wall
   - target
   - spot
+  - car
   m_RaysPerDirection: 2
   m_MaxRayDegrees: 75
   m_SphereCastRadius: 0.25
@@ -858,7 +859,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1523089072662529712, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6410422355120490611, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
@@ -867,23 +872,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1028965669955491393, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
   m_PrefabInstance: {fileID: 910964938641631065}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1839576103120118249 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1523089072662529712, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
-  m_PrefabInstance: {fileID: 910964938641631065}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &774862361
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1839576103120118249}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cf9c96cec87e024196b93ba40d8ec9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1249103841080165988
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -969,11 +957,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1523089072662529712, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6410422355120490611, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.38
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9051742046870791080, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}
+      propertyPath: m_Constraints
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d13219b628a9d8428227a5e120c0ca7, type: 3}

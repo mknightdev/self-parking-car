@@ -27,7 +27,7 @@ public class CarAgent : Agent
     private void Start()
     {
         // Get the agent's rigidbody
-        agentRb = GetComponent<Rigidbody>();
+        agentRb = this.GetComponent<Rigidbody>();
     }
 
     public override void Initialize()
@@ -77,13 +77,28 @@ public class CarAgent : Agent
                 // Hide mesh renderer and box collider 
                 targets[i].GetComponent<MeshRenderer>().enabled = false;
                 targets[i].GetComponent<BoxCollider>().enabled = false;
+
+
+
+                // Show the car
+                targets[i].GetChild(0).Find("Car").GetComponent<MeshRenderer>().enabled = true;
+                targets[i].GetChild(0).Find("Car").GetComponent<BoxCollider>().enabled = true;
             }
             else
             {
+                // Show the target
                 target.GetComponent<MeshRenderer>().enabled = true;
                 target.GetComponent<BoxCollider>().enabled = true;
+
+                // Hide the car
+                target.GetChild(0).Find("Car").GetComponent<MeshRenderer>().enabled = false;
+                target.GetChild(0).Find("Car").GetComponent<BoxCollider>().enabled = false;
             }
+
+            // Reset Cars
+            targets[i].GetChild(0).Find("Car").GetComponent<NPCManager>().ResetNPC();
         }
+
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -177,6 +192,11 @@ public class CarAgent : Agent
         {
             SetReward(-0.5f);
         }
+
+        if (collision.transform.CompareTag("car"))
+        {
+            SetReward(-0.25f);
+        }
     }
 
     private void OnCollisionStay(Collision collision)
@@ -184,6 +204,11 @@ public class CarAgent : Agent
         if (collision.transform.CompareTag("wall"))
         {
             SetReward(-1.0f);
+        }
+
+        if (collision.transform.CompareTag("car"))
+        {
+            SetReward(-0.5f);
         }
     }
 

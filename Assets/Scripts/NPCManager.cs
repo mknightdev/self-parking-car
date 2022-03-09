@@ -7,9 +7,12 @@ public class NPCManager : MonoBehaviour
 {
     private Vector3 defaultPosition;
     private Quaternion defaultRotation;
+    private Rigidbody npcRb;
 
     private void Start()
     {
+        npcRb = this.GetComponent<Rigidbody>();
+
         // Set default values
         defaultPosition = this.transform.localPosition;
         defaultRotation = this.transform.localRotation;
@@ -17,8 +20,10 @@ public class NPCManager : MonoBehaviour
     
     public void ResetNPC()
     {
-        // Reset
         this.transform.localPosition = defaultPosition;
         this.transform.localRotation = defaultRotation;
+
+        this.npcRb.velocity = Vector3.zero;
+        this.npcRb.angularVelocity = Vector3.zero;
     }
 }
