@@ -3,7 +3,57 @@ guid: 059b76977ce5b2545ae20eb1f81789e1
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Back Light
+    second: {fileID: 2100000, guid: a3e75ba49ff46444fbe3fde236ddd356, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Back Number Plate
+    second: {fileID: 2100000, guid: cd4b2a8301779554293a76be662fe3d4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bumper
+    second: {fileID: 2100000, guid: 2f97c2685f34b384aaf48badae0f5862, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Car
+    second: {fileID: 2100000, guid: 1c96e6af22e00f148aeddb1eac6206ba, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Chrome
+    second: {fileID: 2100000, guid: 0946f35b4f1a0f64cb9b6bfb46a6b425, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Indicator
+    second: {fileID: 2100000, guid: f496c200a2d888447916e28a1bf0549e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Light
+    second: {fileID: 2100000, guid: 7f754d088b34e7c43ad449d415e6bf9c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Number Plate
+    second: {fileID: 2100000, guid: 22f4a44a94051754bb763efd8022d392, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tire
+    second: {fileID: 2100000, guid: 2a07f0aa3e746f248808305bd911ec86, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Window
+    second: {fileID: 2100000, guid: ed2c461cb7cd0ea4cb17b2f6cec786fc, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

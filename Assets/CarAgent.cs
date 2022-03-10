@@ -44,7 +44,7 @@ public class CarAgent : Agent
         envSettings = FindObjectOfType<EnvSettings>();
 
         // Get the floor
-        floorRend = this.transform.parent.Find("Floor").GetComponent<MeshRenderer>();
+        floorRend = this.transform.parent.Find("Environment").Find("Floor").GetComponent<MeshRenderer>();
         floorMat = floorRend.material;
 
         // Find all potential targets
@@ -80,11 +80,15 @@ public class CarAgent : Agent
                 targets[i].GetComponent<MeshRenderer>().enabled = false;
                 targets[i].GetComponent<BoxCollider>().enabled = false;
 
-
-
                 // Show the car
-                targets[i].GetChild(0).Find("Car").GetComponent<MeshRenderer>().enabled = true;
-                targets[i].GetChild(0).Find("Car").GetComponent<BoxCollider>().enabled = true;
+                //targets[i].GetChild(0).Find("Car").GetComponent<MeshRenderer>().enabled = true;
+                //targets[i].GetChild(0).Find("Car").GetComponent<BoxCollider>().enabled = true;
+
+                // Hide all child objects of the car, i.e. body, wheels
+                //for (int j = 0; j < targets[i].GetChild(0).Find("Car").childCount; j++)
+                //{
+                //    targets[i].GetChild(0).Find("Car").GetChild(j).gameObject.SetActive(true);
+                //}
             }
             else
             {
@@ -93,29 +97,40 @@ public class CarAgent : Agent
                 target.GetComponent<BoxCollider>().enabled = true;
 
                 // Hide the car
-                target.GetChild(0).Find("Car").GetComponent<MeshRenderer>().enabled = false;
-                target.GetChild(0).Find("Car").GetComponent<BoxCollider>().enabled = false;
+                //target.GetChild(0).Find("Car").GetComponent<MeshRenderer>().enabled = false;
+                //target.GetChild(0).Find("Car").GetComponent<BoxCollider>().enabled = false;
+
+                //for (int j = 0; j < targets[i].GetChild(0).Find("Car").childCount; j++)
+                //{
+                //    targets[i].GetChild(0).Find("Car").GetChild(j).gameObject.SetActive(false);
+                //}
             }
 
             // Reset Cars
-            targets[i].GetChild(0).Find("Car").GetComponent<NPCManager>().ResetNPC();
+            //targets[i].GetChild(0).Find("Car").GetComponent<NPCManager>().ResetNPC();
         }
 
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
+        /// Observations: 12
+
         // Target and Agent Pos, Rot
         sensor.AddObservation(target.localPosition);
         sensor.AddObservation(this.transform.localPosition);
         sensor.AddObservation(this.transform.localRotation);
 
-        sensor.AddObservation(this.agentRb.velocity.x);
-        sensor.AddObservation(this.agentRb.velocity.z);
+        //sensor.AddObservation(this.agentRb.velocity.x);
+        //sensor.AddObservation(this.agentRb.velocity.z);
 
         // Speed
-        sensor.AddObservation(this.moveSpeed);
+        //sensor.AddObservation(this.moveSpeed);
 
+        // Observe speed, turn angle, brake
+        sensor.AddObservation(this.carLocomotion.currentAcceleration);
+        sensor.AddObservation(this.carLocomotion.currentBrakeForce);
+        sensor.AddObservation(this.carLocomotion.currentTurnAngle);
     }
 
     public override void OnActionReceived(ActionBuffers actions)

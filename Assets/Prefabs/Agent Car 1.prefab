@@ -429,7 +429,7 @@ GameObject:
   - component: {fileID: 1276610684}
   - component: {fileID: 1276610685}
   m_Layer: 0
-  m_Name: Agent Car
+  m_Name: Agent Car 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

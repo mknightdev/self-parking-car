@@ -18,12 +18,12 @@ public class CarLocomotion : MonoBehaviour
     [SerializeField] private Transform backLeftTransform;
 
     public float acceleration = 500f;
-    public float brakeForce = 300f; // How quickly the car comes to a stop
+    public float brakeForce = 600f; // How quickly the car comes to a stop
     public float maxTurnAngle = 30f;
 
-    private float currentAcceleration = 0.0f;
-    private float currentBrakeForce = 0.0f;
-    private float currentTurnAngle = 0.0f;
+    [HideInInspector] public float currentAcceleration = 0.0f;
+    [HideInInspector] public float currentBrakeForce = 0.0f;
+    [HideInInspector] public float currentTurnAngle = 0.0f;
 
     private void FixedUpdate()
     {
