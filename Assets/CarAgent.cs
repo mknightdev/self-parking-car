@@ -8,10 +8,9 @@ using Unity.MLAgents.Actuators;
 public class CarAgent : Agent
 {
     public CarLocomotion carLocomotion;
+    public float lerpSpeed = 50f;
 
     public EnvSettings envSettings;
-
-    public float moveSpeed;
     public Transform target;
 
     private Rigidbody agentRb;
@@ -25,6 +24,10 @@ public class CarAgent : Agent
     private float timer = 0.0f;
 
     public List<Transform> targets;
+
+    private float verticalInput;
+    private float horizontalInput;
+    
 
     private void Start()
     {
@@ -135,18 +138,84 @@ public class CarAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
+        // Get action index for movement 
+        int movement = actions.DiscreteActions[0];
+        
+        // Get action index for steering
+        int steering = actions.DiscreteActions[1];
+
+        //verticalInput = actions.DiscreteActions[0];
+        //horizontalInput = actions.DiscreteActions[1];
+
+        switch (movement)
+        {
+            case 0: // Negative
+                carLocomotion.Accelerate(Mathf.Lerp(0, 1, lerpSpeed * Time.deltaTime));
+                Debug.Log($"Forward");
+                break;
+            case 1:
+                carLocomotion.Accelerate(-Mathf.Lerp(0, 1, lerpSpeed * Time.deltaTime));
+                Debug.Log($"Backward");
+                break;
+            case 2:
+                carLocomotion.Accelerate(0);
+                Debug.Log("DontMove");
+                break;
+        }
+
+        switch (steering)
+        {
+            case 0: // Negative
+                carLocomotion.Steer(-Mathf.Lerp(0, 1, lerpSpeed * Time.deltaTime));
+                Debug.Log($"TurnLeft");
+                break;
+            case 1:
+                carLocomotion.Steer(Mathf.Lerp(0, 1, lerpSpeed * Time.deltaTime));
+                Debug.Log($"TurnRight");
+                break;
+            case 2:
+                carLocomotion.Steer(0);
+                Debug.Log("DontTurn");
+                break;
+        }
+
+
+        //// Move forward
+        //if (movement == 0) { carLocomotion.Accelerate(-verticalInput); }
+
+        //// Move backward
+        //if (movement == 1) { carLocomotion.Accelerate(verticalInput); }
+
+        //// Don't move
+        //if (movement == 2) { carLocomotion.Accelerate(0); }
+
+
+        //// Turn left
+        //if (steering == 0) { carLocomotion.Steer(-horizontalInput); }
+
+        //// Turn right
+        //if (steering == 1) { carLocomotion.Steer(horizontalInput); }
+
+        //// Don't turn
+        //if (steering == 2) { carLocomotion.Steer(0); }
+
         // Actions, size = 2
-        Vector3 controlSignal = Vector3.zero;
-        controlSignal.x = actions.ContinuousActions[0];
-        controlSignal.z = actions.ContinuousActions[1];
+        //Vector3 controlSignal = Vector3.zero;
+        //controlSignal.x = actions.ContinuousActions[0];
+        //controlSignal.z = actions.ContinuousActions[1];
         //agentRb.AddForce(controlSignal * moveSpeed, ForceMode.VelocityChange);
 
-        carLocomotion.Accelerate(controlSignal.z);
-        carLocomotion.Steer(controlSignal.x);
+        //carLocomotion.Accelerate(controlSignal.z);
+        //carLocomotion.Steer(controlSignal.x);
 
         // Rewards
         float distance = Vector3.Distance(this.transform.localPosition, target.localPosition);
         //Debug.Log($"Distance: {distance}");
+
+        if (distance < 6.0f)
+        {
+            SetReward(1.0f);
+        }
 
         if (distance < 1.5f)
         {
@@ -156,7 +225,7 @@ public class CarAgent : Agent
         else
         {
             // If the agent hasn't got closer, punish it
-            SetReward(-0.1f);
+            SetReward(-0.01f);
         }
 
         // Punish if it falls off the platform
@@ -175,9 +244,46 @@ public class CarAgent : Agent
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        var continousActionsOut = actionsOut.ContinuousActions;
-        continousActionsOut[0] = Input.GetAxis("Horizontal");
-        continousActionsOut[1] = Input.GetAxis("Vertical");
+        //var continousActionsOut = actionsOut.ContinuousActions;
+        //continousActionsOut[0] = Input.GetAxis("Horizontal");
+        //continousActionsOut[1] = Input.GetAxis("Vertical");
+
+        verticalInput = Input.GetAxis("Vertical");
+        horizontalInput = Input.GetAxis("Horizontal");
+
+        var discreteActionsOut = actionsOut.DiscreteActions;
+
+        // Accelerating/Reversing
+        if (verticalInput < 0)
+        {
+            discreteActionsOut[0] = 0;  // Foward
+        }
+        else if (verticalInput > 0)
+        {
+            discreteActionsOut[0] = 1;  // Backward
+        }
+        else
+        {
+            discreteActionsOut[0] = 2;  // Nothing
+        }
+
+        // Steering
+        if (horizontalInput < 0)
+        {
+            discreteActionsOut[1] = 0;  // Turn Left
+        }
+        else if (horizontalInput > 0)
+        {
+            discreteActionsOut[1] = 1;  // Turn Right
+        }
+        else
+        {
+            discreteActionsOut[1] = 2;  // Nothing
+        }
+
+        //Debug.Log($"Steering: {discreteActionsOut[1]}");
+        //Debug.Log($"Movement: {discreteActionsOut[0]}");
+
     }
 
     private void OnTriggerStay(Collider other)
