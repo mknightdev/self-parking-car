@@ -1440,6 +1440,10 @@ PrefabInstance:
       propertyPath: m_StartVerticalOffset
       value: -0.35
       objectReference: {fileID: 0}
+    - target: {fileID: 7180597728366488975, guid: 3c292c969320a3942bde0a114cabdfd2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7484490921937648468, guid: 3c292c969320a3942bde0a114cabdfd2, type: 3}
       propertyPath: m_RootOrder
       value: 0
