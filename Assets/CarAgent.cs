@@ -7,6 +7,7 @@ using Unity.MLAgents.Actuators;
 
 public class CarAgent : Agent
 {
+    public GameObject carObj;
     public CarLocomotion carLocomotion;
     public float lerpSpeed = 50f;
 
@@ -27,6 +28,8 @@ public class CarAgent : Agent
 
     private float verticalInput;
     private float horizontalInput;
+
+    private List<GameObject> cars;
     
 
     private void Start()
@@ -38,6 +41,8 @@ public class CarAgent : Agent
     public override void Initialize()
     {
         GlobalStats.UpdateText();
+
+        this.cars = new List<GameObject>();
 
         // Get target
         //target = this.transform.parent.Find("Target").transform;
@@ -65,6 +70,21 @@ public class CarAgent : Agent
     {
         GlobalStats.episode += 1;
 
+        if (this.cars.Count > 0)
+        {
+            // Destroy all cars
+            for (int i = 0; i < this.cars.Count; i++)
+            {
+                Destroy(this.cars[i].gameObject);
+            }
+        }
+
+        // Clear the car list
+        this.cars.Clear();
+
+        // Reset Acceleration
+        this.carLocomotion.currentAcceleration = 0.0f;
+
         // Move agent back to starting position
         this.transform.localPosition = new Vector3(0.0f, 0.5f, -6.5f);
         this.transform.localRotation = Quaternion.identity;
@@ -83,30 +103,26 @@ public class CarAgent : Agent
                 targets[i].GetComponent<MeshRenderer>().enabled = false;
                 targets[i].GetComponent<BoxCollider>().enabled = false;
 
-                // Show the car
-                //targets[i].GetChild(0).Find("Car").GetComponent<MeshRenderer>().enabled = true;
-                //targets[i].GetChild(0).Find("Car").GetComponent<BoxCollider>().enabled = true;
+                // Spawn Car
+                GameObject temp = Instantiate(carObj, targets[i].GetChild(0));
+                temp.name = temp.name.Replace("(Clone)","");    // Removes clone in the name
 
-                // Hide all child objects of the car, i.e. body, wheels
-                //for (int j = 0; j < targets[i].GetChild(0).Find("Car").childCount; j++)
-                //{
-                //    targets[i].GetChild(0).Find("Car").GetChild(j).gameObject.SetActive(true);
-                //}
+                var wheelCols = temp.transform.Find("Wheel Colliders");
+                // Zero out
+                for (int j = 0; j < wheelCols.childCount; j++)
+                {
+                    // Stops car from moving when spawned
+                    wheelCols.GetChild(j).GetComponent<WheelCollider>().motorTorque = 0.0f;
+                    wheelCols.GetChild(j).GetComponent<WheelCollider>().brakeTorque = 1000.0f;
+                }
+        
+                this.cars.Add(temp);
             }
             else
             {
                 // Show the target
                 target.GetComponent<MeshRenderer>().enabled = true;
                 target.GetComponent<BoxCollider>().enabled = true;
-
-                // Hide the car
-                //target.GetChild(0).Find("Car").GetComponent<MeshRenderer>().enabled = false;
-                //target.GetChild(0).Find("Car").GetComponent<BoxCollider>().enabled = false;
-
-                //for (int j = 0; j < targets[i].GetChild(0).Find("Car").childCount; j++)
-                //{
-                //    targets[i].GetChild(0).Find("Car").GetChild(j).gameObject.SetActive(false);
-                //}
             }
 
             // Reset Cars
@@ -179,35 +195,6 @@ public class CarAgent : Agent
                 break;
         }
 
-
-        //// Move forward
-        //if (movement == 0) { carLocomotion.Accelerate(-verticalInput); }
-
-        //// Move backward
-        //if (movement == 1) { carLocomotion.Accelerate(verticalInput); }
-
-        //// Don't move
-        //if (movement == 2) { carLocomotion.Accelerate(0); }
-
-
-        //// Turn left
-        //if (steering == 0) { carLocomotion.Steer(-horizontalInput); }
-
-        //// Turn right
-        //if (steering == 1) { carLocomotion.Steer(horizontalInput); }
-
-        //// Don't turn
-        //if (steering == 2) { carLocomotion.Steer(0); }
-
-        // Actions, size = 2
-        //Vector3 controlSignal = Vector3.zero;
-        //controlSignal.x = actions.ContinuousActions[0];
-        //controlSignal.z = actions.ContinuousActions[1];
-        //agentRb.AddForce(controlSignal * moveSpeed, ForceMode.VelocityChange);
-
-        //carLocomotion.Accelerate(controlSignal.z);
-        //carLocomotion.Steer(controlSignal.x);
-
         // Rewards
         float distance = Vector3.Distance(this.transform.localPosition, target.localPosition);
         //Debug.Log($"Distance: {distance}");
@@ -256,11 +243,11 @@ public class CarAgent : Agent
         // Accelerating/Reversing
         if (verticalInput < 0)
         {
-            discreteActionsOut[0] = 0;  // Foward
+            discreteActionsOut[0] = 1;  // Foward
         }
         else if (verticalInput > 0)
         {
-            discreteActionsOut[0] = 1;  // Backward
+            discreteActionsOut[0] = 0;  // Backward
         }
         else
         {
