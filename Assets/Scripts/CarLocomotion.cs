@@ -62,11 +62,13 @@ public class CarLocomotion : MonoBehaviour
 
     public void Accelerate(float value)
     {
+        currentBrakeForce = 0.0f;
         currentAcceleration = acceleration * value;
     }
 
     public void Steer(float value)
     {
+        currentBrakeForce = 0.0f;
         currentTurnAngle = maxTurnAngle * value;
     }
 

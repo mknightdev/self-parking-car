@@ -167,15 +167,15 @@ public class CarAgent : Agent
         {
             case 0: // Negative
                 carLocomotion.Accelerate(Mathf.Lerp(0, 1, lerpSpeed * Time.deltaTime));
-                Debug.Log($"Forward");
+                //Debug.Log($"Forward");
                 break;
             case 1:
                 carLocomotion.Accelerate(-Mathf.Lerp(0, 1, lerpSpeed * Time.deltaTime));
-                Debug.Log($"Backward");
+                //Debug.Log($"Backward");
                 break;
             case 2:
                 carLocomotion.Accelerate(0);
-                Debug.Log("DontMove");
+                //Debug.Log("DontMove");
                 break;
         }
 
@@ -183,15 +183,15 @@ public class CarAgent : Agent
         {
             case 0: // Negative
                 carLocomotion.Steer(-Mathf.Lerp(0, 1, lerpSpeed * Time.deltaTime));
-                Debug.Log($"TurnLeft");
+                //Debug.Log($"TurnLeft");
                 break;
             case 1:
                 carLocomotion.Steer(Mathf.Lerp(0, 1, lerpSpeed * Time.deltaTime));
-                Debug.Log($"TurnRight");
+                //Debug.Log($"TurnRight");
                 break;
             case 2:
                 carLocomotion.Steer(0);
-                Debug.Log("DontTurn");
+                //Debug.Log("DontTurn");
                 break;
         }
 
@@ -207,7 +207,7 @@ public class CarAgent : Agent
         if (distance < 1.5f)
         {
             // If the agent has got closer, reward it
-            SetReward(1.0f);
+            SetReward(1.5f);
         }
         else
         {
@@ -295,7 +295,7 @@ public class CarAgent : Agent
 
     IEnumerator HasParked()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.5f);
         hasStopped = true;
     }
 
@@ -303,13 +303,13 @@ public class CarAgent : Agent
     {
         if (collision.transform.CompareTag("wall"))
         {
-            SetReward(-0.5f);
+            AddReward(-0.5f);
         }
 
         if (collision.transform.CompareTag("car"))
         {
             Debug.Log("Collision Enter");
-            SetReward(-0.1f);
+            AddReward(-0.5f);
         }
     }
 
@@ -317,13 +317,13 @@ public class CarAgent : Agent
     {
         if (collision.transform.CompareTag("wall"))
         {
-            SetReward(-1.0f);
+            AddReward(-0.01f);
         }
 
         if (collision.transform.CompareTag("car"))
         {
             Debug.Log("Collision Stay");
-            SetReward(-0.01f);
+            AddReward(-0.05f);
         }
     }
 
