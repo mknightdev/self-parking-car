@@ -30,6 +30,9 @@ public class CarAgent : Agent
     private float horizontalInput;
 
     private List<GameObject> cars;
+    private bool rewardGave = false;
+
+    private float directionDot;
     
 
     private void Start()
@@ -68,6 +71,7 @@ public class CarAgent : Agent
 
     public override void OnEpisodeBegin()
     {
+        rewardGave = false;
         GlobalStats.episode += 1;
 
         if (this.cars.Count > 0)
@@ -86,7 +90,7 @@ public class CarAgent : Agent
         this.carLocomotion.currentAcceleration = 0.0f;
 
         // Move agent back to starting position
-        this.transform.localPosition = new Vector3(0.0f, 0.5f, -6.5f);
+        this.transform.localPosition = new Vector3(0.0f, 0.5f, -3.0f);
         this.transform.localRotation = Quaternion.identity;
 
         // Zero the velocity
@@ -102,6 +106,8 @@ public class CarAgent : Agent
                 // Hide mesh renderer and box collider 
                 targets[i].GetComponent<MeshRenderer>().enabled = false;
                 targets[i].GetComponent<BoxCollider>().enabled = false;
+
+                this.targets[i].gameObject.layer = 0;
 
                 // Spawn Car
                 GameObject temp = Instantiate(carObj, targets[i].GetChild(0));
@@ -123,6 +129,8 @@ public class CarAgent : Agent
                 // Show the target
                 target.GetComponent<MeshRenderer>().enabled = true;
                 target.GetComponent<BoxCollider>().enabled = true;
+
+                this.target.gameObject.layer = 6;
             }
 
             // Reset Cars
@@ -131,12 +139,18 @@ public class CarAgent : Agent
 
     }
 
+    private void Update()
+    {
+        //Debug.Log($"Direction Dot: {directionDot}");
+    }
+
     public override void CollectObservations(VectorSensor sensor)
     {
         /// Observations: 12
 
         // Target and Agent Pos, Rot
         sensor.AddObservation(target.localPosition);
+        sensor.AddObservation(target.localRotation);
         sensor.AddObservation(this.transform.localPosition);
         sensor.AddObservation(this.transform.localRotation);
 
@@ -150,18 +164,41 @@ public class CarAgent : Agent
         sensor.AddObservation(this.carLocomotion.currentAcceleration);
         sensor.AddObservation(this.carLocomotion.currentBrakeForce);
         sensor.AddObservation(this.carLocomotion.currentTurnAngle);
+
+        // Direction of the goal
+        Vector3 goalForward = target.transform.forward;
+        directionDot = Vector3.Dot(this.transform.forward, goalForward);    // -1 to 1; Opposite rotation; Correct rotation
+        sensor.AddObservation(directionDot);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
+        // Last distance
+        float distance = Vector3.Distance(this.transform.localPosition, this.target.localPosition);
+
+        if (!rewardGave && distance < 2.5f)
+        {
+            AddReward(5.0f);
+            rewardGave = true;
+        }
+
+        // Reward if relatively the same orienation
+        if (directionDot > 0.95)
+        {
+            AddReward(0.1f);
+        }
+
+        //// Punish if it's not the same rotation
+        //if (directionDot < 0)
+        //{
+        //    AddReward(-0.05f);
+        //}
+
         // Get action index for movement 
         int movement = actions.DiscreteActions[0];
         
         // Get action index for steering
         int steering = actions.DiscreteActions[1];
-
-        //verticalInput = actions.DiscreteActions[0];
-        //horizontalInput = actions.DiscreteActions[1];
 
         switch (movement)
         {
@@ -195,35 +232,7 @@ public class CarAgent : Agent
                 break;
         }
 
-        // Rewards
-        float distance = Vector3.Distance(this.transform.localPosition, target.localPosition);
-        //Debug.Log($"Distance: {distance}");
-
-        if (distance < 6.0f)
-        {
-            SetReward(1.0f);
-        }
-
-        if (distance < 1.5f)
-        {
-            // If the agent has got closer, reward it
-            SetReward(1.5f);
-        }
-        else
-        {
-            // If the agent hasn't got closer, punish it
-            SetReward(-0.01f);
-        }
-
-        // Punish if it falls off the platform
-        if (this.transform.localPosition.y < -1.0f)
-        {
-            GlobalStats.fail += 1;
-
-            SetReward(-0.25f);
-            EndEpisode();
-            StartCoroutine(SwapMaterial(envSettings.failMat, 2.0f));
-        }
+        AddReward(-1.0f / MaxStep); // Encourage the agent to reach the goal faster
 
         // Stats
         GlobalStats.UpdateText();
@@ -231,10 +240,6 @@ public class CarAgent : Agent
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        //var continousActionsOut = actionsOut.ContinuousActions;
-        //continousActionsOut[0] = Input.GetAxis("Horizontal");
-        //continousActionsOut[1] = Input.GetAxis("Vertical");
-
         verticalInput = Input.GetAxis("Vertical");
         horizontalInput = Input.GetAxis("Horizontal");
 
@@ -267,10 +272,6 @@ public class CarAgent : Agent
         {
             discreteActionsOut[1] = 2;  // Nothing
         }
-
-        //Debug.Log($"Steering: {discreteActionsOut[1]}");
-        //Debug.Log($"Movement: {discreteActionsOut[0]}");
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -293,7 +294,7 @@ public class CarAgent : Agent
         {
             GlobalStats.success += 1;
 
-            SetReward(5.0f);
+            AddReward(10.0f);
             EndEpisode();
             hasStopped = false;
             hasStoppedCheck = false;
@@ -308,7 +309,7 @@ public class CarAgent : Agent
 
     IEnumerator HasParked()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.0f);
         hasStopped = true;
     }
 
@@ -322,7 +323,7 @@ public class CarAgent : Agent
         if (collision.transform.CompareTag("car"))
         {
             Debug.Log("Collision Enter");
-            AddReward(-0.5f);
+            AddReward(-2.5f);
         }
     }
 

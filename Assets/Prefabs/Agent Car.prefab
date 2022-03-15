@@ -48,10 +48,11 @@ MonoBehaviour:
   - wall
   - target
   - spot
+  - car
   m_RaysPerDirection: 2
   m_MaxRayDegrees: 75
   m_SphereCastRadius: 0.25
-  m_RayLength: 20
+  m_RayLength: 35
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 4294967291
@@ -579,6 +580,7 @@ MonoBehaviour:
   currentAcceleration: 0
   currentBrakeForce: 0
   currentTurnAngle: 0
+  agentCanvas: {fileID: 0}
 --- !u!114 &1276610682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -595,6 +597,7 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 2000
+  carObj: {fileID: 0}
   carLocomotion: {fileID: 7484490921937648466}
   lerpSpeed: 50
   envSettings: {fileID: 0}
@@ -622,9 +625,9 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 228521227fe50404e84efe083c5cac31, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 1
+  m_BehaviorType: 0
   m_BehaviorName: CarPractice
   TeamId: 0
   m_UseChildSensors: 1
@@ -652,7 +655,7 @@ MonoBehaviour:
   m_RaysPerDirection: 2
   m_MaxRayDegrees: 75
   m_SphereCastRadius: 0.25
-  m_RayLength: 20
+  m_RayLength: 35
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 4294967291

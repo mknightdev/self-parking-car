@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CarLocomotion : MonoBehaviour
 {
@@ -24,6 +25,14 @@ public class CarLocomotion : MonoBehaviour
     [HideInInspector] public float currentAcceleration = 0.0f;
     [HideInInspector] public float currentBrakeForce = 0.0f;
     [HideInInspector] public float currentTurnAngle = 0.0f;
+
+    public GameObject agentCanvas;
+
+    private void Update()
+    {
+        //agentCanvas.transform.Find("Acceleration").GetComponent<TextMeshProUGUI>().text = $"A: {currentAcceleration}";
+        //agentCanvas.transform.Find("Steering").GetComponent<TextMeshProUGUI>().text = $"S: {currentTurnAngle}";
+    }
 
     private void FixedUpdate()
     {
