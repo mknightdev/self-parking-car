@@ -273,6 +273,14 @@ public class CarAgent : Agent
 
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("yellowLine"))
+        {
+            AddReward(-3.0f);
+        }
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("target") && !hasStoppedCheck) 
@@ -291,6 +299,11 @@ public class CarAgent : Agent
             hasStoppedCheck = false;
             StartCoroutine(SwapMaterial(envSettings.winMat, 2.0f));
         }
+
+        if (other.CompareTag("yellowLine"))
+        {
+            AddReward(-0.05f);
+        }
     }
 
     IEnumerator HasParked()
@@ -303,7 +316,7 @@ public class CarAgent : Agent
     {
         if (collision.transform.CompareTag("wall"))
         {
-            AddReward(-0.5f);
+            AddReward(-7.0f);
         }
 
         if (collision.transform.CompareTag("car"))

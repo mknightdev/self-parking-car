@@ -17,6 +17,8 @@ public static class GlobalStats
         // Find text objects if they are null 
         CheckText();
 
+        fail = episode - success;
+
         // Calculate success rate %
         float successRate = (success / (float)(success + fail)) * 100;
 

@@ -11,6 +11,8 @@ TagManager:
   - wall
   - spot
   - line
+  - spotline
+  - yellowLine
   layers:
   - Default
   - TransparentFX
