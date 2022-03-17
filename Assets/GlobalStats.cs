@@ -6,6 +6,7 @@ public static class GlobalStats
     public static int episode = 0;
     public static int success = 0;
     public static int fail = 0;
+    public static int completedEpisodes = 0;
 
     public static TextMeshProUGUI episodeText = null;
     public static TextMeshProUGUI successText = null;
@@ -17,7 +18,7 @@ public static class GlobalStats
         // Find text objects if they are null 
         CheckText();
 
-        fail = episode - success;
+        //fail = episode - success;
 
         // Calculate success rate %
         float successRate = (success / (float)(success + fail)) * 100;
@@ -26,7 +27,15 @@ public static class GlobalStats
         if (episodeText != null) { episodeText.text = $"Episode: {episode}"; }
         if (successText != null) { successText.text = $"Success: {success}"; }
         if (failText != null) { failText.text = $"Fail: {fail}"; }
-        if (successRateText != null) { successRateText.text = $"Success Rate: {successRate}%"; }
+
+        if (completedEpisodes == 0)
+        {
+            successRateText.text = $"Success Rate: 0.00%";
+        }
+        else
+        {
+            if (successRateText != null) { successRateText.text = $"Success Rate: {successRate.ToString("F2")}%"; }
+        }
     }
 
     private static void CheckText()

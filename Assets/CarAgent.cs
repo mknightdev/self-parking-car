@@ -32,7 +32,9 @@ public class CarAgent : Agent
     private List<GameObject> cars;
     private bool rewardGave = false;
 
-    private float directionDot;
+    private Vector3 dirToTarget;
+    private bool agentParked = false;
+    private bool firstRun = true;
     
 
     private void Start()
@@ -74,6 +76,12 @@ public class CarAgent : Agent
         rewardGave = false;
         GlobalStats.episode += 1;
 
+        if (!agentParked)
+        {
+            GlobalStats.fail += 1;  // If the agent didn't park, we add a fail
+        }
+        agentParked = false;
+
         if (this.cars.Count > 0)
         {
             // Destroy all cars
@@ -90,7 +98,7 @@ public class CarAgent : Agent
         this.carLocomotion.currentAcceleration = 0.0f;
 
         // Move agent back to starting position
-        this.transform.localPosition = new Vector3(0.0f, 0.5f, -3.0f);
+        this.transform.localPosition = new Vector3(0.0f, 0.5f, -10.0f);
         this.transform.localRotation = Quaternion.identity;
 
         // Zero the velocity
@@ -141,34 +149,32 @@ public class CarAgent : Agent
 
     private void Update()
     {
-        //Debug.Log($"Direction Dot: {directionDot}");
+        GlobalStats.completedEpisodes = CompletedEpisodes;
+        //Debug.Log($"dirToTarget: {dirToTarget.x}, {dirToTarget.y}, {dirToTarget.z}");
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        /// Observations: 12
-
+        /// Observations: 15
         // Target and Agent Pos, Rot
-        sensor.AddObservation(target.localPosition);
-        sensor.AddObservation(target.localRotation);
+        sensor.AddObservation(
+            this.transform.InverseTransformPoint(target.localPosition));
+
         sensor.AddObservation(this.transform.localPosition);
         sensor.AddObservation(this.transform.localRotation);
 
-        //sensor.AddObservation(this.agentRb.velocity.x);
-        //sensor.AddObservation(this.agentRb.velocity.z);
+        //// Observe speed, turn angle, brake
+        //sensor.AddObservation(this.carLocomotion.currentAcceleration);
+        //sensor.AddObservation(this.carLocomotion.currentBrakeForce);
+        //sensor.AddObservation(this.carLocomotion.currentTurnAngle);
 
-        // Speed
-        //sensor.AddObservation(this.moveSpeed);
+        // Direction of Goal
+        dirToTarget = (this.target.position - this.transform.position).normalized;
 
-        // Observe speed, turn angle, brake
-        sensor.AddObservation(this.carLocomotion.currentAcceleration);
-        sensor.AddObservation(this.carLocomotion.currentBrakeForce);
-        sensor.AddObservation(this.carLocomotion.currentTurnAngle);
+        sensor.AddObservation(
+            this.transform.InverseTransformDirection(dirToTarget));
 
-        // Direction of the goal
-        Vector3 goalForward = target.transform.forward;
-        directionDot = Vector3.Dot(this.transform.forward, goalForward);    // -1 to 1; Opposite rotation; Correct rotation
-        sensor.AddObservation(directionDot);
+        sensor.AddObservation(this.target.forward);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -178,21 +184,9 @@ public class CarAgent : Agent
 
         if (!rewardGave && distance < 2.5f)
         {
-            AddReward(5.0f);
+            AddReward(2.5f);
             rewardGave = true;
         }
-
-        // Reward if relatively the same orienation
-        if (directionDot > 0.95)
-        {
-            AddReward(0.1f);
-        }
-
-        //// Punish if it's not the same rotation
-        //if (directionDot < 0)
-        //{
-        //    AddReward(-0.05f);
-        //}
 
         // Get action index for movement 
         int movement = actions.DiscreteActions[0];
@@ -293,8 +287,9 @@ public class CarAgent : Agent
         if (other.CompareTag("target") && hasStopped)
         {
             GlobalStats.success += 1;
+            agentParked = true;
 
-            AddReward(10.0f);
+            AddReward(5.0f);
             EndEpisode();
             hasStopped = false;
             hasStoppedCheck = false;
@@ -309,25 +304,11 @@ public class CarAgent : Agent
 
     IEnumerator HasParked()
     {
-        yield return new WaitForSeconds(0.0f);
+        yield return new WaitForSeconds(0.5f);
         hasStopped = true;
     }
 
     private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.transform.CompareTag("wall"))
-        {
-            AddReward(-7.0f);
-        }
-
-        if (collision.transform.CompareTag("car"))
-        {
-            Debug.Log("Collision Enter");
-            AddReward(-2.5f);
-        }
-    }
-
-    private void OnCollisionStay(Collision collision)
     {
         if (collision.transform.CompareTag("wall"))
         {
@@ -336,10 +317,24 @@ public class CarAgent : Agent
 
         if (collision.transform.CompareTag("car"))
         {
-            Debug.Log("Collision Stay");
-            AddReward(-0.05f);
+            Debug.Log("Collision Enter");
+            AddReward(-0.01f);
         }
     }
+
+    //private void OnCollisionStay(Collision collision)
+    //{
+    //    if (collision.transform.CompareTag("wall"))
+    //    {
+    //        AddReward(-0.01f);
+    //    }
+
+    //    if (collision.transform.CompareTag("car"))
+    //    {
+    //        Debug.Log("Collision Stay");
+    //        AddReward(-0.01f);
+    //    }
+    //}
 
     IEnumerator SwapMaterial(Material mat, float time)
     {
