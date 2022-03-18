@@ -49,6 +49,8 @@ public class CarAgent : Agent
     {
         GlobalStats.UpdateText();
 
+        agentParked = true;
+
         defaultRotation = transform.localRotation;
 
         this.cars = new List<GameObject>();
@@ -301,6 +303,8 @@ public class CarAgent : Agent
             float angleBonus = 0.0f;
             angleBonus = CheckRotation();
 
+            //Debug.Log($"Orientation: {orientationBonus}, Angle: {angleBonus}");
+
             AddReward(5.0f + orientationBonus + angleBonus);
             EndEpisode();
             hasStopped = false;
@@ -335,6 +339,9 @@ public class CarAgent : Agent
     private float CheckRotation()
     {
         float angle = Quaternion.Angle(this.transform.localRotation, defaultRotation);
+
+        Debug.Log($"angle: {angle}");
+
         float angleBonus = 0.0f;
 
         if (angle > 0)
