@@ -35,6 +35,8 @@ public class CarAgent : Agent
     private Vector3 dirToTarget;
     private bool agentParked = false;
     private bool firstRun = true;
+
+    private Quaternion defaultRotation;
     
 
     private void Start()
@@ -46,6 +48,8 @@ public class CarAgent : Agent
     public override void Initialize()
     {
         GlobalStats.UpdateText();
+
+        defaultRotation = transform.localRotation;
 
         this.cars = new List<GameObject>();
 
@@ -289,7 +293,22 @@ public class CarAgent : Agent
             GlobalStats.success += 1;
             agentParked = true;
 
-            AddReward(5.0f);
+            // Check rotation
+            float angle = Quaternion.Angle(this.transform.localRotation, defaultRotation);
+            float angleBonus = 0.0f;
+
+            if (angle > 0)
+            {
+                // If there is an angle difference, set the angle bonus as a negative
+                angleBonus = -angle / 1000.0f;
+            }
+            else if (angle <= 0)
+            {
+                // If there is no angle change, set the angle bonus as a positive
+                angleBonus = 90.0f / 1000.0f;
+            }
+
+            AddReward(5.0f + angleBonus);
             EndEpisode();
             hasStopped = false;
             hasStoppedCheck = false;
