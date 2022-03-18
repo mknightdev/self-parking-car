@@ -293,22 +293,15 @@ public class CarAgent : Agent
             GlobalStats.success += 1;
             agentParked = true;
 
+            // Check orientation
+            float orientationBonus = 0.0f;
+            orientationBonus = CheckOrientation();
+
             // Check rotation
-            float angle = Quaternion.Angle(this.transform.localRotation, defaultRotation);
             float angleBonus = 0.0f;
+            angleBonus = CheckRotation();
 
-            if (angle > 0)
-            {
-                // If there is an angle difference, set the angle bonus as a negative
-                angleBonus = -angle / 1000.0f;
-            }
-            else if (angle <= 0)
-            {
-                // If there is no angle change, set the angle bonus as a positive
-                angleBonus = 90.0f / 1000.0f;
-            }
-
-            AddReward(5.0f + angleBonus);
+            AddReward(5.0f + orientationBonus + angleBonus);
             EndEpisode();
             hasStopped = false;
             hasStoppedCheck = false;
@@ -319,6 +312,43 @@ public class CarAgent : Agent
         {
             AddReward(-0.05f);
         }
+    }
+
+    private float CheckOrientation()
+    {
+        float directionDot = Vector3.Dot(this.transform.forward, target.transform.forward);
+
+        float orientationBonus = 0.0f;
+
+        if (directionDot > 0)
+        {
+            orientationBonus = directionDot / 50.0f;
+        }
+        else if (directionDot < 0)
+        {
+            orientationBonus = -directionDot / 50.0f;
+        }
+
+        return orientationBonus;
+    }
+
+    private float CheckRotation()
+    {
+        float angle = Quaternion.Angle(this.transform.localRotation, defaultRotation);
+        float angleBonus = 0.0f;
+
+        if (angle > 0)
+        {
+            // If there is an angle difference, set the angle bonus as a negative
+            angleBonus = -angle / 1000.0f;
+        }
+        else if (angle <= 0)
+        {
+            // If there is no angle change, set the angle bonus as a positive
+            angleBonus = 90.0f / 1000.0f;
+        }
+
+        return angleBonus;
     }
 
     IEnumerator HasParked()
