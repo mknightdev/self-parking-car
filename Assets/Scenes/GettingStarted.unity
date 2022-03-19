@@ -550,8 +550,32 @@ PrefabInstance:
       value: New Parking Area
       objectReference: {fileID: 0}
     - target: {fileID: 8550008395365054409, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8550008395365054409, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.49999958
+      objectReference: {fileID: 0}
+    - target: {fileID: 8550008395365054409, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8550008395365054409, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8550008395365054409, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8550008395365054409, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8550008395365054409, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
@@ -1149,7 +1173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1412442092263096217, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
@@ -1210,7 +1234,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1412442092263096217, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8187347b66146e144a18bff38b6527b0, type: 3}

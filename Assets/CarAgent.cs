@@ -161,7 +161,7 @@ public class CarAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        /// Observations: 15
+        /// Observations: 17
         // Target and Agent Pos, Rot
         sensor.AddObservation(
             this.transform.InverseTransformPoint(target.localPosition));
@@ -170,9 +170,9 @@ public class CarAgent : Agent
         sensor.AddObservation(this.transform.localRotation);
 
         //// Observe speed, turn angle, brake
-        //sensor.AddObservation(this.carLocomotion.currentAcceleration);
+        sensor.AddObservation(this.carLocomotion.currentAcceleration);
         //sensor.AddObservation(this.carLocomotion.currentBrakeForce);
-        //sensor.AddObservation(this.carLocomotion.currentTurnAngle);
+        sensor.AddObservation(this.carLocomotion.currentTurnAngle);
 
         // Direction of Goal
         dirToTarget = (this.target.position - this.transform.position).normalized;
@@ -274,14 +274,6 @@ public class CarAgent : Agent
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("yellowLine"))
-        {
-            AddReward(-3.0f);
-        }
-    }
-
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("target") && !hasStoppedCheck) 
@@ -303,18 +295,11 @@ public class CarAgent : Agent
             float angleBonus = 0.0f;
             angleBonus = CheckRotation();
 
-            //Debug.Log($"Orientation: {orientationBonus}, Angle: {angleBonus}");
-
             AddReward(5.0f + orientationBonus + angleBonus);
             EndEpisode();
             hasStopped = false;
             hasStoppedCheck = false;
             StartCoroutine(SwapMaterial(envSettings.winMat, 2.0f));
-        }
-
-        if (other.CompareTag("yellowLine"))
-        {
-            AddReward(-0.05f);
         }
     }
 
@@ -338,21 +323,15 @@ public class CarAgent : Agent
 
     private float CheckRotation()
     {
-        float angle = Quaternion.Angle(this.transform.localRotation, defaultRotation);
-
-        Debug.Log($"angle: {angle}");
-
         float angleBonus = 0.0f;
-
-        if (angle > 0)
+        if (Mathf.Abs(Vector3.Dot(this.transform.up, Vector3.down)) < 0.125f)
         {
-            // If there is an angle difference, set the angle bonus as a negative
-            angleBonus = -angle / 1000.0f;
+            // Car is neither up or down, with 1/8 of a 90 degree rotation
+            angleBonus = -90 / 1000.0f;
         }
-        else if (angle <= 0)
+        else
         {
-            // If there is no angle change, set the angle bonus as a positive
-            angleBonus = 90.0f / 1000.0f;
+            angleBonus =  90 / 1000.0f;
         }
 
         return angleBonus;
@@ -374,7 +353,7 @@ public class CarAgent : Agent
         if (collision.transform.CompareTag("car"))
         {
             Debug.Log("Collision Enter");
-            AddReward(-0.01f);
+            AddReward(-0.05f);
         }
     }
 
