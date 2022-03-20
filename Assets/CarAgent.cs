@@ -357,19 +357,18 @@ public class CarAgent : Agent
         }
     }
 
-    //private void OnCollisionStay(Collision collision)
-    //{
-    //    if (collision.transform.CompareTag("wall"))
-    //    {
-    //        AddReward(-0.01f);
-    //    }
+    private void OnCollisionStay(Collision collision)
+    {
+        //if (collision.transform.CompareTag("wall"))
+        //{
+        //    AddReward(-0.01f);
+        //}
 
-    //    if (collision.transform.CompareTag("car"))
-    //    {
-    //        Debug.Log("Collision Stay");
-    //        AddReward(-0.01f);
-    //    }
-    //}
+        if (collision.transform.CompareTag("car"))
+        {
+            AddReward(-0.001f);
+        }
+    }
 
     IEnumerator SwapMaterial(Material mat, float time)
     {
