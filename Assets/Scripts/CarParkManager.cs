@@ -6,74 +6,105 @@ public class CarParkManager : MonoBehaviour
 {
     // Car Park Settings
     [Header("Car Park Settings")]
-    public List<GameObject> parkingSlots;
+    public List<Transform> parkingSlots;
     public int numOfCars;
 
     // Car Settings
     [Header("Car Settings")]
     public List<GameObject> cars;
+    public GameObject carPrefab;
+    public int carsToSpawn;
 
-    [Header("Debugger")]
-    [SerializeField] private SceneRestarter sceneRestarter;
+    // Target
+    public Transform target;
+    
 
-    void Start()
+    public void CleanCarPark()
     {
-        SetupCarPark();
-    }
-
-    private void SetupCarPark()
-    {
-        Transform m_parkingSlots = transform.GetChild(0);
-
-        // Iterate and add all parking slots
-        for (int i = 0; i < m_parkingSlots.childCount; i++)
+        if (this.cars.Count > 0)
         {
-            parkingSlots.Add(m_parkingSlots.GetChild(i).gameObject);
-        }
-
-        // TODO: Test functionality
-        //if (numOfCars > m_parkingSlots.childCount) { return; }
-
-        numOfCars = Random.Range(m_parkingSlots.childCount / 2, m_parkingSlots.childCount - 1);
-
-        int randomValue = 0;
-        List<int> randomValueList = new List<int>();
-
-        // Loop until we have equal amount of values to cars
-        while (randomValueList.Count != numOfCars)
-        {
-            // Generate random value
-            randomValue = Random.Range(0, parkingSlots.Count);
-
-            // If we don't have it, add it to the list
-            if (!randomValueList.Contains(randomValue))
+            // Destroy all cars
+            for (int i = 0; i < this.cars.Count; i++)
             {
-                randomValueList.Add(randomValue);
+                Destroy(this.cars[i].gameObject);
             }
         }
 
-        // Iterate and turn off target object based on how many cars already parked
-        for (int i = 0; i < numOfCars; i++)
-        {
-            // Remove target object, as it's occupied
-            parkingSlots[randomValueList[i]].transform.GetChild(0).gameObject.SetActive(false);
-
-            // Spawn car in position
-            Instantiate(cars[Random.Range(0, cars.Count)], parkingSlots[randomValueList[i]].transform);
-
-            // Debug to show value
-            Debug.Log($"List #{i}: {randomValueList[i]}");
-        }
-
-        // Clear the list when all cars have spawned
-        randomValueList.Clear();
-
-        sceneRestarter.numOfCarsText.text = $"Number of Cars: {numOfCars}";
-        sceneRestarter.freeSlotsText.text = $"Free Slots: {m_parkingSlots.childCount - numOfCars}";
+        // Clear the car list
+        this.cars.Clear();
     }
 
-    void Update()
+    public void GetTargets()
     {
-        
+        // Find all potential targets
+        for (int i = 0; i < this.transform.childCount; i++)
+        {
+            // Get all children tagged as 'target'
+            if (this.transform.GetChild(i).CompareTag("target"))
+            {
+                this.parkingSlots.Add(this.transform.GetChild(i));
+            }
+        }
+
+        // Choose main target
+        this.target = this.parkingSlots[Random.Range(0, parkingSlots.Count)]; // TODO: Choose based on closest one
+    }
+
+    public void SetupCarPark()
+    {
+        for (int i = 0; i < parkingSlots.Count; i++)
+        {
+            // Hide all other targets (red boxes)
+            if (target != parkingSlots[i])
+            {
+                // Hide mesh renderer and box collider
+                this.parkingSlots[i].GetComponent<MeshRenderer>().enabled = false;
+                this.parkingSlots[i].GetComponent<BoxCollider>().enabled = false;
+
+                // Remove from sensor layer
+                this.parkingSlots[i].gameObject.layer = 0;  // 0 is default
+            }
+            else
+            {
+                // Show the main target
+                target.GetComponent<MeshRenderer>().enabled = true;
+                target.GetComponent<BoxCollider>().enabled = true;
+
+                // Add to sensor layer 
+                this.target.gameObject.layer = 6;   // 6 is target layer
+            }
+        }
+
+        SpawnCars();
+    }
+
+    private void SpawnCars()
+    {
+        List<int> randomNumbers = new List<int>();
+        for (int i = 0; i < carsToSpawn; i++)
+        {
+            int randomNumber = Random.Range(0, parkingSlots.Count - 1);
+
+            if (!randomNumbers.Contains(randomNumber) && !parkingSlots[randomNumber].GetComponent<MeshRenderer>().enabled)
+            {
+                randomNumbers.Add(randomNumber);
+                GameObject spawnedCar = Instantiate(carPrefab, parkingSlots[randomNumber].GetChild(0));
+                cars.Add(spawnedCar);
+            }
+        }
+
+        randomNumbers.Clear();
+
+        // Stop spawned cars from moving
+        for (int i = 0; i < cars.Count; i++)
+        {
+            Transform wheelColliders = cars[i].transform.Find("Wheel Colliders");
+            for (int j = 0; j < wheelColliders.childCount; j++)
+            {
+                // Stops car from moving when spawned
+                wheelColliders.GetChild(j).GetComponent<WheelCollider>().motorTorque = 0.0f;
+                wheelColliders.GetChild(j).GetComponent<WheelCollider>().brakeTorque = 1000.0f;
+            }
+        }
     }
 }

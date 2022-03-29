@@ -37,6 +37,8 @@ public class CarAgent : Agent
     private bool firstRun = true;
 
     private Quaternion defaultRotation;
+
+    private CarParkManager carParkManager;
     
 
     private void Start()
@@ -49,15 +51,13 @@ public class CarAgent : Agent
     {
         GlobalStats.UpdateText();
 
+        carParkManager = transform.parent.GetComponent<CarParkManager>();
+
         agentParked = true;
 
         defaultRotation = transform.localRotation;
 
-        this.cars = new List<GameObject>();
-
-        // Get target
-        //target = this.transform.parent.Find("Target").transform;
-        //Debug.Log($"TargetLocal: {target.position}");
+        //this.cars = new List<GameObject>();
 
         // Get the environment settings
         envSettings = FindObjectOfType<EnvSettings>();
@@ -66,15 +66,7 @@ public class CarAgent : Agent
         floorRend = this.transform.parent.Find("Environment").Find("Floor").GetComponent<MeshRenderer>();
         floorMat = floorRend.material;
 
-        // Find all potential targets
-        for (int i = 0; i < this.transform.parent.childCount; i++)
-        {
-            // Compare name
-            if (this.transform.parent.GetChild(i).name == "Target")
-            {
-                targets.Add(this.transform.parent.GetChild(i));
-            }
-        }
+        carParkManager.GetTargets();
     }
 
     public override void OnEpisodeBegin()
@@ -88,17 +80,7 @@ public class CarAgent : Agent
         }
         agentParked = false;
 
-        if (this.cars.Count > 0)
-        {
-            // Destroy all cars
-            for (int i = 0; i < this.cars.Count; i++)
-            {
-                Destroy(this.cars[i].gameObject);
-            }
-        }
-
-        // Clear the car list
-        this.cars.Clear();
+        carParkManager.CleanCarPark();
 
         // Reset Acceleration
         this.carLocomotion.currentAcceleration = 0.0f;
@@ -111,46 +93,11 @@ public class CarAgent : Agent
         this.agentRb.velocity = Vector3.zero;
         this.agentRb.angularVelocity = Vector3.zero;
 
-        // Choose random target
-        target = targets[Random.Range(0, targets.Count)];
-        for (int i = 0; i < targets.Count; i++)
-        {
-            if (target != targets[i])
-            {
-                // Hide mesh renderer and box collider 
-                targets[i].GetComponent<MeshRenderer>().enabled = false;
-                targets[i].GetComponent<BoxCollider>().enabled = false;
 
-                this.targets[i].gameObject.layer = 0;
+        // Get the selected target
+        target = this.transform.parent.GetComponent<CarParkManager>().target;
 
-                // Spawn Car
-                GameObject temp = Instantiate(carObj, targets[i].GetChild(0));
-                temp.name = temp.name.Replace("(Clone)","");    // Removes clone in the name
-
-                var wheelCols = temp.transform.Find("Wheel Colliders");
-                // Zero out
-                for (int j = 0; j < wheelCols.childCount; j++)
-                {
-                    // Stops car from moving when spawned
-                    wheelCols.GetChild(j).GetComponent<WheelCollider>().motorTorque = 0.0f;
-                    wheelCols.GetChild(j).GetComponent<WheelCollider>().brakeTorque = 1000.0f;
-                }
-        
-                this.cars.Add(temp);
-            }
-            else
-            {
-                // Show the target
-                target.GetComponent<MeshRenderer>().enabled = true;
-                target.GetComponent<BoxCollider>().enabled = true;
-
-                this.target.gameObject.layer = 6;
-            }
-
-            // Reset Cars
-            //targets[i].GetChild(0).Find("Car").GetComponent<NPCManager>().ResetNPC();
-        }
-
+        carParkManager.SetupCarPark();
     }
 
     private void Update()
