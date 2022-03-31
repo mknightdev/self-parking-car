@@ -34,7 +34,7 @@ public class CarParkManager : MonoBehaviour
         this.cars.Clear();
     }
 
-    public void GetTargets()
+    public void GetAllTargets()
     {
         // Find all potential targets
         for (int i = 0; i < this.transform.childCount; i++)
@@ -45,9 +45,12 @@ public class CarParkManager : MonoBehaviour
                 this.parkingSlots.Add(this.transform.GetChild(i));
             }
         }
+    }
 
+    public Transform SetMainTarget()
+    {
         // Choose main target
-        this.target = this.parkingSlots[Random.Range(0, parkingSlots.Count)]; // TODO: Choose based on closest one
+        return this.target = this.parkingSlots[Random.Range(0, parkingSlots.Count)]; // TODO: Choose based on closest one
     }
 
     public void SetupCarPark()
@@ -81,7 +84,9 @@ public class CarParkManager : MonoBehaviour
     private void SpawnCars()
     {
         List<int> randomNumbers = new List<int>();
-        for (int i = 0; i < carsToSpawn; i++)
+        int carsSpawned = 0;
+
+        while (carsSpawned != carsToSpawn)
         {
             int randomNumber = Random.Range(0, parkingSlots.Count - 1);
 
@@ -89,6 +94,8 @@ public class CarParkManager : MonoBehaviour
             {
                 randomNumbers.Add(randomNumber);
                 GameObject spawnedCar = Instantiate(carPrefab, parkingSlots[randomNumber].GetChild(0));
+                carsSpawned++;
+
                 cars.Add(spawnedCar);
             }
         }

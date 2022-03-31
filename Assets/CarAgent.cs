@@ -66,7 +66,7 @@ public class CarAgent : Agent
         floorRend = this.transform.parent.Find("Environment").Find("Floor").GetComponent<MeshRenderer>();
         floorMat = floorRend.material;
 
-        carParkManager.GetTargets();
+        carParkManager.GetAllTargets();
     }
 
     public override void OnEpisodeBegin()
@@ -95,7 +95,7 @@ public class CarAgent : Agent
 
 
         // Get the selected target
-        target = this.transform.parent.GetComponent<CarParkManager>().target;
+        target = carParkManager.SetMainTarget();
 
         carParkManager.SetupCarPark();
     }
