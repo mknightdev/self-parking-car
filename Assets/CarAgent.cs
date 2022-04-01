@@ -86,8 +86,8 @@ public class CarAgent : Agent
         this.carLocomotion.currentAcceleration = 0.0f;
 
         // Move agent back to starting position
-        this.transform.localPosition = new Vector3(0.0f, 0.5f, -10.0f);
-        this.transform.localRotation = Quaternion.identity;
+        this.transform.localPosition = new Vector3(10.0f, 0.5f, -10.5f);
+        this.transform.localRotation = Quaternion.Euler(0.0f, 270.0f, 0.0f);
 
         // Zero the velocity
         this.agentRb.velocity = Vector3.zero;
@@ -132,6 +132,14 @@ public class CarAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
+        // Agent fell off
+        if (agentRb.velocity.y < -2.0f)
+        {
+            SetReward(-10.0f);
+            EndEpisode();
+            StartCoroutine(SwapMaterial(envSettings.failMat, 2.0f));
+        }
+
         // Last distance
         float distance = Vector3.Distance(this.transform.localPosition, this.target.localPosition);
 
@@ -296,24 +304,21 @@ public class CarAgent : Agent
         {
             AddReward(-0.01f);
         }
-
-        if (collision.transform.CompareTag("car"))
+        else if (collision.transform.CompareTag("car"))
         {
-            Debug.Log("Collision Enter");
+            AddReward(-0.01f);
+        }
+        else if (collision.transform.CompareTag("bumper"))
+        {
             AddReward(-0.05f);
         }
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        //if (collision.transform.CompareTag("wall"))
-        //{
-        //    AddReward(-0.01f);
-        //}
-
-        if (collision.transform.CompareTag("car"))
+        if (other.transform.CompareTag("yellowLine"))
         {
-            AddReward(-0.005f);
+            AddReward(-0.025f);
         }
     }
 

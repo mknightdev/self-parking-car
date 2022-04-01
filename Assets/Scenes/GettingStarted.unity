@@ -507,15 +507,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1412442092263096216, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9
+      value: 8.997303
       objectReference: {fileID: 0}
     - target: {fileID: 1412442092263096216, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.0086025
       objectReference: {fileID: 0}
     - target: {fileID: 1412442092263096216, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.25
+      value: -13.318991
       objectReference: {fileID: 0}
     - target: {fileID: 1412442092263096216, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -548,10 +548,6 @@ PrefabInstance:
     - target: {fileID: 1412442092263096217, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
       propertyPath: m_Name
       value: New Parking Area
-      objectReference: {fileID: 0}
-    - target: {fileID: 3557632905849364344, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
-      propertyPath: carsToSpawn
-      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
@@ -1553,10 +1549,6 @@ PrefabInstance:
     - target: {fileID: 1412442092263096217, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
       propertyPath: m_Name
       value: New Parking Area (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1412442092263096217, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
