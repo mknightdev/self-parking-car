@@ -133,7 +133,7 @@ public class CarAgent : Agent
     public override void OnActionReceived(ActionBuffers actions)
     {
         // Agent fell off
-        if (agentRb.velocity.y < -2.0f)
+        if (this.transform.localPosition.y < -2.0f)
         {
             SetReward(-10.0f);
             EndEpisode();
