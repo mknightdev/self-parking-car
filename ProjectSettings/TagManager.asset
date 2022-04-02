@@ -13,6 +13,7 @@ TagManager:
   - line
   - spotline
   - yellowLine
+  - bumper
   layers:
   - Default
   - TransparentFX

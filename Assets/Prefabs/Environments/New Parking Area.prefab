@@ -1522,10 +1522,10 @@ PrefabInstance:
     - target: {fileID: 1276610683, guid: 3c292c969320a3942bde0a114cabdfd2, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 9f963ee56c58af6488546b3552843805, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 1d44f7363aa0e2c48802cdb24c3dfca1, type: 3}
     - target: {fileID: 1276610683, guid: 3c292c969320a3942bde0a114cabdfd2, type: 3}
       propertyPath: m_BehaviorType
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1276610683, guid: 3c292c969320a3942bde0a114cabdfd2, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize

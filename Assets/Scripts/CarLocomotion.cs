@@ -67,6 +67,8 @@ public class CarLocomotion : MonoBehaviour
         UpdateWheel(frontLeft, frontLeftTransform);
         UpdateWheel(backRight, backRightTransform);
         UpdateWheel(backLeft, backLeftTransform);
+
+        Debug.Log($"Acceleration: {currentAcceleration}");
     }
 
     public void Accelerate(float value)

@@ -294,7 +294,7 @@ public class CarAgent : Agent
 
     IEnumerator HasParked()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.0f);
         hasStopped = true;
     }
 
@@ -302,7 +302,7 @@ public class CarAgent : Agent
     {
         if (collision.transform.CompareTag("wall"))
         {
-            AddReward(-0.01f);
+            AddReward(-0.1f);
         }
         else if (collision.transform.CompareTag("car"))
         {
@@ -311,6 +311,14 @@ public class CarAgent : Agent
         else if (collision.transform.CompareTag("bumper"))
         {
             AddReward(-0.05f);
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.transform.CompareTag("wall"))
+        {
+            AddReward(-0.001f);
         }
     }
 
