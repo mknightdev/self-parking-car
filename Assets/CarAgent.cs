@@ -302,11 +302,11 @@ public class CarAgent : Agent
     {
         if (collision.transform.CompareTag("wall"))
         {
-            AddReward(-0.2f);
+            AddReward(-0.3f);
         }
         else if (collision.transform.CompareTag("car"))
         {
-            AddReward(-0.05f);
+            AddReward(-0.1f);
         }
         else if (collision.transform.CompareTag("bumper"))  // These are at the back of each parking spot
         {

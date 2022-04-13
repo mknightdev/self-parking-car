@@ -88,7 +88,7 @@ public class CarParkManager : MonoBehaviour
 
         while (carsSpawned != carsToSpawn)
         {
-            int randomNumber = Random.Range(0, parkingSlots.Count - 1);
+            int randomNumber = Random.Range(0, parkingSlots.Count);
 
             if (!randomNumbers.Contains(randomNumber) && !parkingSlots[randomNumber].GetComponent<MeshRenderer>().enabled)
             {
@@ -97,6 +97,8 @@ public class CarParkManager : MonoBehaviour
                 carsSpawned++;
 
                 cars.Add(spawnedCar);
+
+                //Debug.Log(carsSpawned);
             }
         }
 
