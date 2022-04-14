@@ -306,7 +306,7 @@ public class CarAgent : Agent
         }
         else if (collision.transform.CompareTag("car"))
         {
-            AddReward(-0.1f);
+            AddReward(-0.075f);
         }
         else if (collision.transform.CompareTag("bumper"))  // These are at the back of each parking spot
         {
@@ -322,7 +322,7 @@ public class CarAgent : Agent
         }
         else if (collision.transform.CompareTag("car"))
         {
-            AddReward(-0.0001f);
+            AddReward(-0.0025f);
         }
     }
 
