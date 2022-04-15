@@ -45,6 +45,8 @@ public class CarAgent : Agent
     {
         // Get the agent's rigidbody
         agentRb = this.GetComponent<Rigidbody>();
+
+
     }
 
     public override void Initialize()
@@ -322,7 +324,7 @@ public class CarAgent : Agent
         }
         else if (collision.transform.CompareTag("car"))
         {
-            AddReward(-0.0005f);
+            AddReward(-0.00025f);
         }
     }
 
