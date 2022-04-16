@@ -324,7 +324,7 @@ public class CarAgent : Agent
         }
         else if (collision.transform.CompareTag("car"))
         {
-            AddReward(-0.00025f);
+            AddReward(-0.00015f);
         }
     }
 
