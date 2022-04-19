@@ -314,6 +314,13 @@ public class CarAgent : Agent
         {
             AddReward(-0.05f);
         }
+        else if (collision.transform.CompareTag("path"))
+        {
+            GlobalStats.fail += 1;
+            AddReward(-5f);
+            EndEpisode();
+            StartCoroutine(SwapMaterial(envSettings.failMat, 2.0f));
+        }
     }
 
     private void OnCollisionStay(Collision collision)
@@ -324,7 +331,7 @@ public class CarAgent : Agent
         }
         else if (collision.transform.CompareTag("car"))
         {
-            AddReward(-0.00015f);
+            AddReward(-0.00020f);
         }
     }
 
