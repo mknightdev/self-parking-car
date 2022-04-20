@@ -549,9 +549,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: New Parking Area
       objectReference: {fileID: 0}
+    - target: {fileID: 2820794127149982470, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 3116367908772373235, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 5202626666472493658, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
       propertyPath: m_LocalPosition.z
       value: 2.8749962
+      objectReference: {fileID: 0}
+    - target: {fileID: 5709323227746209426, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 6369638058452095111, guid: 8187347b66146e144a18bff38b6527b0, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8187347b66146e144a18bff38b6527b0, type: 3}

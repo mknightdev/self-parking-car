@@ -314,13 +314,7 @@ public class CarAgent : Agent
         {
             AddReward(-0.05f);
         }
-        else if (collision.transform.CompareTag("path"))
-        {
-            GlobalStats.fail += 1;
-            AddReward(-5f);
-            EndEpisode();
-            StartCoroutine(SwapMaterial(envSettings.failMat, 2.0f));
-        }
+
     }
 
     private void OnCollisionStay(Collision collision)
@@ -340,6 +334,13 @@ public class CarAgent : Agent
         if (other.transform.CompareTag("yellowLine"))
         {
             AddReward(-0.05f);
+        }
+        else if (other.transform.CompareTag("path"))
+        {
+            GlobalStats.fail += 1;
+            AddReward(-0.1f);
+            EndEpisode();
+            StartCoroutine(SwapMaterial(envSettings.failMat, 2.0f));
         }
     }
 
