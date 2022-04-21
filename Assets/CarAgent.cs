@@ -231,34 +231,7 @@ public class CarAgent : Agent
         }
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("target") && !hasStoppedCheck) 
-        {
-            hasStoppedCheck = true;
-            StartCoroutine(HasParked());
-        }
 
-        if (other.CompareTag("target") && hasStopped)
-        {
-            GlobalStats.success += 1;
-            agentParked = true;
-
-            // Check orientation
-            float orientationBonus = 0.0f;
-            orientationBonus = CheckOrientation();
-
-            // Check rotation
-            float angleBonus = 0.0f;
-            angleBonus = CheckRotation();
-
-            AddReward(5.0f + orientationBonus + angleBonus);
-            EndEpisode();
-            hasStopped = false;
-            hasStoppedCheck = false;
-            StartCoroutine(SwapMaterial(envSettings.winMat, 2.0f));
-        }
-    }
 
     private float CheckOrientation()
     {
@@ -344,10 +317,44 @@ public class CarAgent : Agent
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("target") && !hasStoppedCheck)
+        {
+            hasStoppedCheck = true;
+            StartCoroutine(HasParked());
+        }
+
+        if (other.CompareTag("target") && hasStopped)
+        {
+            GlobalStats.success += 1;
+            agentParked = true;
+
+            // Check orientation
+            float orientationBonus = 0.0f;
+            orientationBonus = CheckOrientation();
+
+            // Check rotation
+            float angleBonus = 0.0f;
+            angleBonus = CheckRotation();
+
+            AddReward(5.0f + orientationBonus + angleBonus);
+            EndEpisode();
+            hasStopped = false;
+            hasStoppedCheck = false;
+            StartCoroutine(SwapMaterial(envSettings.winMat, 2.0f));
+        }
+
+        if (other.transform.CompareTag("yellowLine"))
+        {
+            AddReward(-0.075f);
+        }
+    }
+
     IEnumerator SwapMaterial(Material mat, float time)
     {
-        floorRend.material = mat;
-        yield return new WaitForSeconds(time);  // wait for 2 seconds
-        floorRend.material = floorMat;
+        floorRend.material = mat;   // Swap to win or fail material
+        yield return new WaitForSeconds(time);  // Wait for 2 seconds
+        floorRend.material = floorMat;  // Swap back to default material
     }
 }
