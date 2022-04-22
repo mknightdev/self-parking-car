@@ -347,7 +347,7 @@ public class CarAgent : Agent
 
         if (other.transform.CompareTag("yellowLine"))
         {
-            AddReward(-0.075f);
+            AddReward(-0.0002f);
         }
     }
 
