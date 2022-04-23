@@ -48,8 +48,8 @@ MonoBehaviour:
   - wall
   - target
   - car
-  m_RaysPerDirection: 2
-  m_MaxRayDegrees: 75
+  m_RaysPerDirection: 3
+  m_MaxRayDegrees: 90
   m_SphereCastRadius: 0.25
   m_RayLength: 35
   m_RayLayerMask:
@@ -671,7 +671,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 1
+  m_BehaviorType: 0
   m_BehaviorName: CarPractice
   TeamId: 0
   m_UseChildSensors: 1
@@ -695,7 +695,7 @@ MonoBehaviour:
   - wall
   - target
   - car
-  m_RaysPerDirection: 2
+  m_RaysPerDirection: 3
   m_MaxRayDegrees: 75
   m_SphereCastRadius: 0.25
   m_RayLength: 216

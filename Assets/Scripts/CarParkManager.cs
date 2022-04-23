@@ -64,6 +64,9 @@ public class CarParkManager : MonoBehaviour
                 this.parkingSlots[i].GetComponent<MeshRenderer>().enabled = false;
                 this.parkingSlots[i].GetComponent<BoxCollider>().enabled = false;
 
+                this.parkingSlots[i].Find("SpaceCP").GetComponent<MeshRenderer>().enabled = false;
+                this.parkingSlots[i].Find("SpaceCP").GetComponent<BoxCollider>().enabled = false;
+
                 // Remove from sensor layer
                 this.parkingSlots[i].gameObject.layer = 0;  // 0 is default
             }
@@ -72,6 +75,10 @@ public class CarParkManager : MonoBehaviour
                 // Show the main target
                 target.GetComponent<MeshRenderer>().enabled = true;
                 target.GetComponent<BoxCollider>().enabled = true;
+
+                // Show the checkpoint 
+                target.Find("SpaceCP").GetComponent<MeshRenderer>().enabled = true;
+                target.Find("SpaceCP").GetComponent<BoxCollider>().enabled = true;
 
                 // Add to sensor layer 
                 this.target.gameObject.layer = 6;   // 6 is target layer

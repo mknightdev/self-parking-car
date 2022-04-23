@@ -35,6 +35,7 @@ public class CarAgent : Agent
     private Vector3 dirToTarget;
     private bool agentParked = false;
     private bool firstRun = true;
+    private bool spaceCPGave = false;
 
     private Quaternion defaultRotation;
 
@@ -73,6 +74,7 @@ public class CarAgent : Agent
 
     public override void OnEpisodeBegin()
     {
+        spaceCPGave = false;
         rewardGave = false;
         GlobalStats.episode += 1;
 
@@ -88,7 +90,7 @@ public class CarAgent : Agent
         this.carLocomotion.currentAcceleration = 0.0f;
 
         // Move agent back to starting position
-        this.transform.localPosition = new Vector3(10.0f, 0.5f, -10.5f);
+        this.transform.localPosition = new Vector3(7.5f, 0.5f, -9.0f);
         this.transform.localRotation = Quaternion.Euler(0.0f, 270.0f, 0.0f);
 
         // Zero the velocity
@@ -314,6 +316,11 @@ public class CarAgent : Agent
             AddReward(-0.1f);
             EndEpisode();
             StartCoroutine(SwapMaterial(envSettings.failMat, 2.0f));
+        }
+        else if (other.transform.CompareTag("spaceCheckPoint") && !spaceCPGave)
+        {
+            spaceCPGave = true;
+            AddReward(0.1f);
         }
     }
 

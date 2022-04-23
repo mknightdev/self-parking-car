@@ -15,6 +15,7 @@ TagManager:
   - yellowLine
   - bumper
   - path
+  - spaceCheckPoint
   layers:
   - Default
   - TransparentFX
