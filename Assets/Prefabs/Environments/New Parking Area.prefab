@@ -1578,6 +1578,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1412442092263096216}
     m_Modifications:
+    - target: {fileID: 1276610683, guid: 3c292c969320a3942bde0a114cabdfd2, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 38b1e44fd75eb6f42aec36b88acb1945, type: 3}
     - target: {fileID: 1276610684, guid: 3c292c969320a3942bde0a114cabdfd2, type: 3}
       propertyPath: m_RaysPerDirection
       value: 4
