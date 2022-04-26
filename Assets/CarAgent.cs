@@ -40,14 +40,13 @@ public class CarAgent : Agent
     private Quaternion defaultRotation;
 
     private CarParkManager carParkManager;
-    
+    private bool isCollidingWithCar;
+    private float timerCountdown = 1.5f;
 
     private void Start()
     {
         // Get the agent's rigidbody
         agentRb = this.GetComponent<Rigidbody>();
-
-
     }
 
     public override void Initialize()
@@ -76,6 +75,8 @@ public class CarAgent : Agent
     {
         spaceCPGave = false;
         rewardGave = false;
+        isCollidingWithCar = false;
+        timerCountdown = 1.5f;
         GlobalStats.episode += 1;
 
         if (!agentParked)
@@ -108,6 +109,19 @@ public class CarAgent : Agent
     {
         GlobalStats.completedEpisodes = CompletedEpisodes;
         //Debug.Log($"dirToTarget: {dirToTarget.x}, {dirToTarget.y}, {dirToTarget.z}");
+
+        if (isCollidingWithCar)
+        {
+            timerCountdown -= Time.deltaTime;
+            if (timerCountdown < 0)
+            {
+                timerCountdown = 0;
+            }
+        }
+        else
+        {
+            timerCountdown = 1.5f;
+        }
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -284,6 +298,7 @@ public class CarAgent : Agent
         else if (collision.transform.CompareTag("car"))
         {
             AddReward(-0.075f);
+            isCollidingWithCar = true;
         }
         else if (collision.transform.CompareTag("bumper"))  // These are at the back of each parking spot
         {
@@ -298,10 +313,24 @@ public class CarAgent : Agent
         {
             AddReward(-0.005f);
         }
-        else if (collision.transform.CompareTag("car"))
+        //else if (collision.transform.CompareTag("car"))
+        //{
+        //    AddReward(-0.00020f);
+        //}
+        else if (collision.transform.CompareTag("car") && isCollidingWithCar)
         {
-            AddReward(-0.00020f);
+            if (timerCountdown <= 0)
+            {
+                SetReward(-0.1f);
+                EndEpisode();
+                StartCoroutine(SwapMaterial(envSettings.failMat, 2.0f));
+            }
         }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        isCollidingWithCar = false;
     }
 
     private void OnTriggerEnter(Collider other)
