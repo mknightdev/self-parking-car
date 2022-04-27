@@ -339,7 +339,7 @@ GameObject:
   - component: {fileID: 1412442092263096216}
   - component: {fileID: 3557632905849364344}
   m_Layer: 0
-  m_Name: New Parking Area
+  m_Name: Training Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1581,7 +1581,7 @@ PrefabInstance:
     - target: {fileID: 1276610683, guid: 3c292c969320a3942bde0a114cabdfd2, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: ebcfbbdfa98bc104ba3973ef23b5331a, type: 3}
     - target: {fileID: 1276610683, guid: 3c292c969320a3942bde0a114cabdfd2, type: 3}
       propertyPath: m_BehaviorType
       value: 0
