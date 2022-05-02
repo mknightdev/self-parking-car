@@ -43,6 +43,8 @@ public class CarAgent : Agent
     private bool isCollidingWithCar;
     private float timerCountdown = 1.5f;
 
+    private Vector3 defaultPosition;
+
     private void Start()
     {
         // Get the agent's rigidbody
@@ -57,7 +59,8 @@ public class CarAgent : Agent
 
         agentParked = true;
 
-        defaultRotation = transform.localRotation;
+        defaultPosition = this.transform.localPosition;
+        defaultRotation = this.transform.localRotation;
 
         //this.cars = new List<GameObject>();
 
@@ -91,8 +94,8 @@ public class CarAgent : Agent
         this.carLocomotion.currentAcceleration = 0.0f;
 
         // Move agent back to starting position
-        this.transform.localPosition = new Vector3(7.5f, 0.5f, -9.0f);
-        this.transform.localRotation = Quaternion.Euler(0.0f, 270.0f, 0.0f);
+        this.transform.localPosition = defaultPosition;
+        this.transform.localRotation = defaultRotation;
 
         // Zero the velocity
         this.agentRb.velocity = Vector3.zero;
