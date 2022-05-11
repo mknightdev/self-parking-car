@@ -130,24 +130,24 @@ public class CarAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         /// Observations: 17
-        // Target and Agent Pos, Rot
-        sensor.AddObservation(
-            this.transform.InverseTransformPoint(target.localPosition));
+        // Target local position
+        sensor.AddObservation(this.transform.InverseTransformPoint(target.localPosition));
 
+        // Agent's local position and rotation
         sensor.AddObservation(this.transform.localPosition);
         sensor.AddObservation(this.transform.localRotation);
 
-        //// Observe speed, turn angle, brake
+        // Acceleration and turn angle of the agent
         sensor.AddObservation(this.carLocomotion.currentAcceleration);
-        //sensor.AddObservation(this.carLocomotion.currentBrakeForce);
         sensor.AddObservation(this.carLocomotion.currentTurnAngle);
 
-        // Direction of Goal
+        // Calculate the direction to the target
         dirToTarget = (this.target.position - this.transform.position).normalized;
 
-        sensor.AddObservation(
-            this.transform.InverseTransformDirection(dirToTarget));
+        // Direction to goal
+        sensor.AddObservation(this.transform.InverseTransformDirection(dirToTarget));
 
+        // Forward direction of the target, useful for orientation reward
         sensor.AddObservation(this.target.forward);
     }
 
