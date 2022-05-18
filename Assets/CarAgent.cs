@@ -396,4 +396,14 @@ public class CarAgent : Agent
         yield return new WaitForSeconds(time);  // Wait for 2 seconds
         floorRend.material = floorMat;  // Swap back to default material
     }
+
+    public void DisposeAcademy()
+    {
+        Academy.Instance.Dispose();
+    }
+
+    public void ResetAcademy()
+    {
+        //Academy.Instance.OnEnvironmentReset.Invoke();
+    }
 }

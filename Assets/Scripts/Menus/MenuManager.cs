@@ -5,8 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
+    private CarAgent carAgent;
+
+    private void Awake()
+    {
+        if (SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            carAgent = FindObjectOfType<CarAgent>();
+        }
+    }
+
     public void ReturnToMenu()
     {
+        // Before we return, dispose of the Academy.
+        carAgent.DisposeAcademy();
+        
         SceneManager.LoadScene(0);
     }
 
@@ -22,5 +35,20 @@ public class MenuManager : MonoBehaviour
             // Show/Hide escape menu
             transform.GetChild(0).gameObject.SetActive(!transform.GetChild(0).gameObject.activeInHierarchy);
         }
+    }
+
+    public void LoadScene(int index)
+    {
+        SceneManager.LoadScene("TestingEnv_" + index);
+    }
+
+    public void StoreCarValue(int numOfCars)
+    {
+        SceneLoader.carsToSpawn = numOfCars;
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

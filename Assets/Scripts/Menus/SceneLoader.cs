@@ -5,25 +5,39 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
+    private static GameObject instance;
     public static int carsToSpawn;
+
+    private CarAgent carAgent;
 
     private void Awake()
     {
         DontDestroyOnLoad(this);
+
+        if (instance == null)
+        {
+            instance = gameObject;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    public void SetCarsValue(int numOfCars)
-    {
-        carsToSpawn = numOfCars;
-    }
+    //private void OnEnable()
+    //{
+    //    SceneManager.sceneLoaded += OnSceneLoaded;
+    //}
 
-    public void LoadScene(int index)
-    {
-        SceneManager.LoadScene("TestingEnv_" + index);
-    }
-    
-    public void ReturnToMenu()
-    {   
-        SceneManager.LoadScene(0);
-    }
+    //void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    //{
+    //    carAgent = FindObjectOfType<CarAgent>();
+        
+    //}
+
+    //public void SetCarsValue(int numOfCars)
+    //{
+    //    carsToSpawn = numOfCars;
+    //    Debug.Log($"Set new car value. Now: {carsToSpawn}");
+    //}
 }

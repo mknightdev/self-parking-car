@@ -24,17 +24,17 @@ public static class GlobalStats
         float successRate = (success / (float)(success + fail)) * 100;
 
         // Update text
-        if (episodeText != null) { episodeText.text = $"Episode: {episode}"; }
-        if (successText != null) { successText.text = $"Success: {success}"; }
-        if (failText != null) { failText.text = $"Fail: {fail}"; }
+        if (episodeText != null) { episodeText.text = $"Episode: <color=#F14A63>{episode}"; }
+        if (successText != null) { successText.text = $"Success: <color=#F14A63>{success}"; }
+        if (failText != null) { failText.text = $"Fail: <color=#F14A63>{fail}"; }
 
         if (completedEpisodes == 0)
         {
-            successRateText.text = $"Success Rate: 0.00%";
+            successRateText.text = $"Success Rate: <color=#F14A63>0.00%";
         }
         else
         {
-            if (successRateText != null) { successRateText.text = $"Success Rate: {successRate.ToString("F2")}%"; }
+            if (successRateText != null) { successRateText.text = $"Success Rate: <color=#F14A63>{successRate.ToString("F2")}%"; }
         }
     }
 
