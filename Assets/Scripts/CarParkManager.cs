@@ -17,7 +17,11 @@ public class CarParkManager : MonoBehaviour
 
     // Target
     public Transform target;
-    
+
+    private void Start()
+    {
+        carsToSpawn = SceneLoader.carsToSpawn;   
+    }
 
     public void CleanCarPark()
     {

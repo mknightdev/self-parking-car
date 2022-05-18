@@ -572,7 +572,7 @@ MonoBehaviour:
   numOfCars: 0
   cars: []
   carPrefab: {fileID: 4182962856033919686, guid: b9e5eac86e3a0754490b125c786a2d5c, type: 3}
-  carsToSpawn: 1
+  carsToSpawn: 2
   target: {fileID: 0}
 --- !u!1001 &320484839822040765
 PrefabInstance:
