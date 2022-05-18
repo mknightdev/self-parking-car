@@ -1059,6 +1059,7 @@ GameObject:
   - component: {fileID: 794754863}
   - component: {fileID: 794754862}
   - component: {fileID: 794754864}
+  - component: {fileID: 794754865}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -1094,19 +1095,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5e13115cfb6a52408125871c4aa81b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parkingSlots: {fileID: 1780298288}
-  goalParkingSlot: {fileID: 0}
-  motorForce: 1000
-  breakForce: 3000
-  maxAngle: 30
-  frontLCollider: {fileID: 5767731938226204152}
-  frontRCollider: {fileID: 5767731937912291314}
-  backLCollider: {fileID: 5767731939831161154}
-  backRCollider: {fileID: 5767731939939999595}
-  frontLTransform: {fileID: 6305497832514380809}
-  frontRTransform: {fileID: 6305497832804185603}
-  backLTransform: {fileID: 6305497830918826163}
-  backRTransform: {fileID: 6305497830809818778}
+  frontRight: {fileID: 0}
+  frontLeft: {fileID: 0}
+  backRight: {fileID: 0}
+  backLeft: {fileID: 0}
+  frontRightTransform: {fileID: 0}
+  frontLeftTransform: {fileID: 0}
+  backRightTransform: {fileID: 0}
+  backLeftTransform: {fileID: 0}
+  acceleration: 500
+  brakeForce: 600
+  maxTurnAngle: 30
+  currentAcceleration: 0
+  currentBrakeForce: 0
+  currentTurnAngle: 0
+  agentCanvas: {fileID: 0}
 --- !u!54 &794754860
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1213,6 +1216,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DecisionPeriod: 10
   TakeActionsBetweenDecisions: 1
+--- !u!114 &794754865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794754857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b6042bc9a5d4aa58d931eae49442e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
 --- !u!1 &849819724
 GameObject:
   m_ObjectHideFlags: 0
@@ -1554,7 +1573,9 @@ MonoBehaviour:
   numOfCars: 6
   cars:
   - {fileID: 7348012205081024070, guid: 95f9b9944ff1d1d4fbbc9a1d3945eed9, type: 3}
-  sceneRestarter: {fileID: 434487449}
+  carPrefab: {fileID: 0}
+  carsToSpawn: 0
+  target: {fileID: 0}
 --- !u!1001 &1291256612
 PrefabInstance:
   m_ObjectHideFlags: 0
