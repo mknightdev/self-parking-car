@@ -6,24 +6,29 @@ public class CarParkManager : MonoBehaviour
 {
     // Car Park Settings
     [Header("Car Park Settings")]
-    public List<Transform> parkingSlots;
-    public int numOfCars;
+    public List<Transform> parkingSlots;    // Stores all parking spaces.
 
     // Car Settings
     [Header("Car Settings")]
-    public List<GameObject> cars;
-    public GameObject carPrefab;
-    public int carsToSpawn;
+    public List<GameObject> cars;   // Stores all spawned cars.
+    public GameObject carPrefab;    // NPC car to spawn. 
+    public int carsToSpawn; // Number of cars to spawn within the car park. 
 
     // Target
-    public Transform target;
+    public Transform target;  // The chosen target for the agent.
 
     private void Start()
     {
+        // Set the number of cars to spawn, 
+        // based on what scenario was picked from the menu screen.
         carsToSpawn = SceneLoader.carsToSpawn;   
     }
 
-    public void CleanCarPark()
+    /// <summary>
+    /// Destroys all of the cars within the car park, ready for the next episode.
+    /// Clears the list of cars within the car park.
+    /// </summary>
+    public void ClearCarPark()
     {
         if (this.cars.Count > 0)
         {
@@ -38,6 +43,10 @@ public class CarParkManager : MonoBehaviour
         this.cars.Clear();
     }
 
+    /// <summary>
+    /// Finds and stores all the parking spaces within the car park.
+    /// The chosen target is picked randomly from this list. 
+    /// </summary>
     public void GetAllTargets()
     {
         // Find all potential targets
@@ -51,12 +60,24 @@ public class CarParkManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Choose a random target within the parking space list. 
+    /// </summary>
+    /// <returns>the chosen target.</returns>
     public Transform SetMainTarget()
     {
         // Choose main target
         return this.target = this.parkingSlots[Random.Range(0, parkingSlots.Count)]; // TODO: Choose based on closest one
     }
 
+
+    /// <summary>
+    /// Hides the mesh renderer and colliders of the non-chosen targets.
+    /// Shows the mesh renderer and colliders of the chosen target.
+    /// 
+    /// Changes the layer based on if it is a target or non-target, 
+    /// this is used for sensors. 
+    /// </summary>
     public void SetupCarPark()
     {
         for (int i = 0; i < parkingSlots.Count; i++)
@@ -92,6 +113,11 @@ public class CarParkManager : MonoBehaviour
         SpawnCars();
     }
 
+    /// <summary>
+    /// Once the target has been chosen, spawn cars in the remaining spaces.
+    /// The number of cars spawned is based on what scenario was chosen, 
+    /// or what was set in the inspector.
+    /// </summary>
     private void SpawnCars()
     {
         List<int> randomNumbers = new List<int>();

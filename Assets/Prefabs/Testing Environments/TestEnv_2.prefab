@@ -2046,6 +2046,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1757813605220434988}
     m_Modifications:
+    - target: {fileID: 1276610682, guid: 3c292c969320a3942bde0a114cabdfd2, type: 3}
+      propertyPath: hasParkedTimer
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1276610683, guid: 3c292c969320a3942bde0a114cabdfd2, type: 3}
       propertyPath: m_Model
       value: 

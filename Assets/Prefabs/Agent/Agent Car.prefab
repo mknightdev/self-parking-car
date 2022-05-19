@@ -618,13 +618,23 @@ MonoBehaviour:
   frontLeftTransform: {fileID: 7723396659403246783}
   backRightTransform: {fileID: 7723396659220805083}
   backLeftTransform: {fileID: 7723396659271945327}
+  isFourWheelDrive: 0
   acceleration: 750
   brakeForce: 600
   maxTurnAngle: 35
   currentAcceleration: 0
   currentBrakeForce: 0
   currentTurnAngle: 0
-  agentCanvas: {fileID: 0}
+  wheelCols:
+  - {fileID: 7484490921363796784}
+  - {fileID: 7484490922793930825}
+  - {fileID: 7484490922131555049}
+  - {fileID: 3209959863142309262}
+  wheelMeshes:
+  - {fileID: 7723396658232827784}
+  - {fileID: 7723396659403246783}
+  - {fileID: 7723396659220805083}
+  - {fileID: 7723396659271945327}
 --- !u!114 &1276610682
 MonoBehaviour:
   m_ObjectHideFlags: 0

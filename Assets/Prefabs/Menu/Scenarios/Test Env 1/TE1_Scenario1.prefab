@@ -105,7 +105,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Consists of <u>11</u> occupied parking spaces.
+  m_text: Consists of <u color=#F54B64><color=#F54B64>11</u></color> occupied parking
+    spaces.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -132,12 +133,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15.7
+  m_fontSize: 16.5
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 10.8
-  m_fontSizeMax: 15.7
+  m_fontSizeMax: 16.5
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
@@ -524,6 +525,42 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 574037835279324673}
     m_Modifications:
+    - target: {fileID: 883996925574409464, guid: 4faab58ddd8fbb24394f8628ecd1af50, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 883996925574409464, guid: 4faab58ddd8fbb24394f8628ecd1af50, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 883996925574409464, guid: 4faab58ddd8fbb24394f8628ecd1af50, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StoreCarValue
+      objectReference: {fileID: 0}
+    - target: {fileID: 883996925574409464, guid: 4faab58ddd8fbb24394f8628ecd1af50, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: LoadScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 883996925574409464, guid: 4faab58ddd8fbb24394f8628ecd1af50, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MenuManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 883996925574409464, guid: 4faab58ddd8fbb24394f8628ecd1af50, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: MenuManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 883996925574409464, guid: 4faab58ddd8fbb24394f8628ecd1af50, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 883996925574409464, guid: 4faab58ddd8fbb24394f8628ecd1af50, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 883996925574409464, guid: 4faab58ddd8fbb24394f8628ecd1af50, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5954195986826555760, guid: 4faab58ddd8fbb24394f8628ecd1af50, type: 3}
       propertyPath: m_Name
       value: SelectButton

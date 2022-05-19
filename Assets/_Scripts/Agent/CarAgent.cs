@@ -7,43 +7,41 @@ using Unity.MLAgents.Actuators;
 
 public class CarAgent : Agent
 {
-    public GameObject carObj;
-    public CarLocomotion carLocomotion;
-    public float lerpSpeed = 50f;
+    [Header("Target Settings")]
+    public Transform chosenTarget;  // The chosen target for the given episode.  
+    public List<Transform> targets; // List of potential targets within the car park. 
+    public float parkedWaitTime = 1.0f; // Wait time for how long the agent has stayed in the space before succeeding.
 
-    public EnvSettings envSettings;
-    public Transform target;
+    [Header("Environment Settings")]
+    public EnvSettings envSettings; // Access to floor materials.
 
-    private Rigidbody agentRb;
+    private MeshRenderer floorRend; // Floor renderer to change the material. 
+    private Material floorMat;  // Default floor material. 
+    private CarParkManager carParkManager;  // Used to setup and reset the car park. 
 
-    private MeshRenderer floorRend;
-    private Material floorMat;
-    private float oldDistance = 0.0f;
-    private bool hasStopped = false;
-    private bool hasStoppedCheck = false;
-    private bool startTimer = false;
-    private float timer = 0.0f;
+    [Header("Agent Settings")]
+    public CarLocomotion carLocomotion; // Access to apply forces to the agent.
+    public float lerpSpeed = 50f;   // Smoothes out the car locomotion forces.
 
-    public List<Transform> targets;
-
-    private float verticalInput;
-    private float horizontalInput;
-
-    private List<GameObject> cars;
-    private bool rewardGave = false;
-
-    private Vector3 dirToTarget;
-    private bool agentParked = false;
-    private bool firstRun = true;
-    private bool spaceCPGave = false;
-
-    private Quaternion defaultRotation;
-
-    private CarParkManager carParkManager;
-    private bool isCollidingWithCar;
-    private float timerCountdown = 1.5f;
-
+    private Rigidbody agentRb;  // Used to zero out velocities when OnEpisodeBegin() is called. 
+    private Quaternion defaultRotation; // Used to reset the agent when OnEpisodeBegin() is called.
     private Vector3 defaultPosition;
+
+    // Rewards
+    private bool rewardGave = false;    // If the distance reward was given. 
+    private bool spaceCPGave = false;   // If the checkpoint reward was given. 
+
+    // Detection
+    private bool agentParked = false;       // If the agent parked successfully. 
+    private bool hasStopped = false;        // If the agent has stopped or not, after checking.
+    private bool hasStoppedCheck = false;   // The first check to see if the agent has stopped.
+    private bool isCollidingWithCar;        // Starts the timer when we start colliding with a car. 
+    private float timerCountdown = 1.5f;    // How long the agent collided with a car for.
+    private Vector3 dirToTarget;
+
+    // Input
+    private float verticalInput;    // Player input when heuristic is set.
+    private float horizontalInput;
 
     private void Start()
     {
@@ -53,42 +51,49 @@ public class CarAgent : Agent
 
     public override void Initialize()
     {
+        // Update UI text. Shows episodes, success, fails and success rate. 
         GlobalStats.UpdateText();
-
+        
+        // Find the car park manager. 
         carParkManager = transform.parent.GetComponent<CarParkManager>();
 
+        // Set to true to prevent a false fail (UI Only).
         agentParked = true;
 
+        // Set the default rotation and position of the agent.
         defaultPosition = this.transform.localPosition;
         defaultRotation = this.transform.localRotation;
-
-        //this.cars = new List<GameObject>();
 
         // Get the environment settings
         envSettings = FindObjectOfType<EnvSettings>();
 
-        // Get the floor
+        // Get the floor renderer.
         floorRend = this.transform.parent.Find("Environment").Find("Floor").GetComponent<MeshRenderer>();
-        floorMat = floorRend.material;
+        floorMat = floorRend.material;  // Set default material. 
 
+        // Find all the targets within the car park.
         carParkManager.GetAllTargets();
     }
 
     public override void OnEpisodeBegin()
     {
+        // Reset detection bools. 
         spaceCPGave = false;
         rewardGave = false;
         isCollidingWithCar = false;
         timerCountdown = 1.5f;
+
+        // Increase our episode count. 
         GlobalStats.episode += 1;
 
+        // If we failed to park last episode, increase the fail count. 
         if (!agentParked)
         {
             GlobalStats.fail += 1;  // If the agent didn't park, we add a fail
         }
-        agentParked = false;
+        agentParked = false;    // Reset the bool for this episode. 
 
-        carParkManager.CleanCarPark();
+        carParkManager.ClearCarPark();  // Clears the car park by removing all cars.
 
         // Reset Acceleration
         this.carLocomotion.currentAcceleration = 0.0f;
@@ -103,16 +108,18 @@ public class CarAgent : Agent
 
 
         // Get the selected target
-        target = carParkManager.SetMainTarget();
+        chosenTarget = carParkManager.SetMainTarget();
 
+        // Sets up the car park with cars and hides relevant target meshes. 
         carParkManager.SetupCarPark();
     }
 
     private void Update()
     {
+        // Update the UI for our completed episodes. 
         GlobalStats.completedEpisodes = CompletedEpisodes;
-        //Debug.Log($"dirToTarget: {dirToTarget.x}, {dirToTarget.y}, {dirToTarget.z}");
 
+        // Start the timer countdown if we are colliding with a car. 
         if (isCollidingWithCar)
         {
             timerCountdown -= Time.deltaTime;
@@ -131,7 +138,7 @@ public class CarAgent : Agent
     {
         /// Observations: 17
         // Target local position
-        sensor.AddObservation(this.transform.InverseTransformPoint(target.localPosition));
+        sensor.AddObservation(this.transform.InverseTransformPoint(chosenTarget.localPosition));
 
         // Agent's local position and rotation
         sensor.AddObservation(this.transform.localPosition);
@@ -142,13 +149,13 @@ public class CarAgent : Agent
         sensor.AddObservation(this.carLocomotion.currentTurnAngle);
 
         // Calculate the direction to the target
-        dirToTarget = (this.target.position - this.transform.position).normalized;
+        dirToTarget = (this.chosenTarget.position - this.transform.position).normalized;
 
-        // Direction to goal
+        // Direction to goal in local position
         sensor.AddObservation(this.transform.InverseTransformDirection(dirToTarget));
 
         // Forward direction of the target, useful for orientation reward
-        sensor.AddObservation(this.target.forward);
+        sensor.AddObservation(this.chosenTarget.forward);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -162,8 +169,9 @@ public class CarAgent : Agent
         }
 
         // Last distance
-        float distance = Vector3.Distance(this.transform.localPosition, this.target.localPosition);
+        float distance = Vector3.Distance(this.transform.localPosition, this.chosenTarget.localPosition);
 
+        // Give reward for getting closer to the target. 
         if (!rewardGave && distance < 2.5f)
         {
             AddReward(2.5f);
@@ -176,46 +184,53 @@ public class CarAgent : Agent
         // Get action index for steering
         int steering = actions.DiscreteActions[1];
 
+        // Movement actions. 
         switch (movement)
         {
+            // Forward.
             case 0: // Negative
                 carLocomotion.Accelerate(Mathf.Lerp(0, 1, lerpSpeed * Time.deltaTime));
-                //Debug.Log($"Forward");
                 break;
+
+            // Backwards.
             case 1:
                 carLocomotion.Accelerate(-Mathf.Lerp(0, 1, lerpSpeed * Time.deltaTime));
                 //Debug.Log($"Backward");
                 break;
+
+            // Don't move. 
             case 2:
                 carLocomotion.Accelerate(0);
-                //Debug.Log("DontMove");
                 break;
         }
 
         switch (steering)
         {
+            // Turn left. 
             case 0: // Negative
                 carLocomotion.Steer(-Mathf.Lerp(0, 1, lerpSpeed * Time.deltaTime));
-                //Debug.Log($"TurnLeft");
                 break;
+
+            // Turn right.
             case 1:
                 carLocomotion.Steer(Mathf.Lerp(0, 1, lerpSpeed * Time.deltaTime));
-                //Debug.Log($"TurnRight");
                 break;
+
+            // Don't turn. 
             case 2:
                 carLocomotion.Steer(0);
-                //Debug.Log("DontTurn");
                 break;
         }
 
         AddReward(-1.0f / MaxStep); // Encourage the agent to reach the goal faster
 
-        // Stats
+        // Update the UI stats.
         GlobalStats.UpdateText();
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
+        // Player input. 
         verticalInput = Input.GetAxis("Vertical");
         horizontalInput = Input.GetAxis("Horizontal");
 
@@ -251,13 +266,17 @@ public class CarAgent : Agent
     }
 
 
-
+    /// <summary>
+    /// Calculate the orientation of the agent compared to the direction of the chosen target.
+    /// </summary>
+    /// <returns></returns>
     private float CheckOrientation()
     {
-        float directionDot = Vector3.Dot(this.transform.forward, target.transform.forward);
+        float directionDot = Vector3.Dot(this.transform.forward, chosenTarget.transform.forward);
 
         float orientationBonus = 0.0f;
 
+        // Give a positive or negative reward based on the orientation.
         if (directionDot > 0)
         {
             orientationBonus = directionDot / 50.0f;
@@ -270,12 +289,21 @@ public class CarAgent : Agent
         return orientationBonus;
     }
 
+    /// <summary>
+    /// Calculate the angle bonus to see if the agent is on its side. 
+    /// 
+    /// </summary>
+    /// <returns></returns>
     private float CheckRotation()
     {
         float angleBonus = 0.0f;
-        if (Mathf.Abs(Vector3.Dot(this.transform.up, Vector3.down)) < 0.125f)
+
+        // Agent receives a positive or negative reward if it is up-right or on its side. 
+        /// The calculation of the angle was originally written by Eno-Khaon.
+        if (Mathf.Abs(Vector3.Dot(this.transform.up, Vector3.down)) < 0.125f) /// end of calculation. 
         {
-            // Car is neither up or down, with 1/8 of a 90 degree rotation
+
+            // Car is neither up or down, with 1/8 of a 90 degree rotation.
             angleBonus = -90 / 1000.0f;
         }
         else
@@ -286,14 +314,19 @@ public class CarAgent : Agent
         return angleBonus;
     }
 
+    /// <summary>
+    /// Timer to check if the agent has stopped before parking in the chosen target.
+    /// </summary>
     IEnumerator HasParked()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(parkedWaitTime);
         hasStopped = true;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        // Punishments for entering a collision with obstacles.
+
         if (collision.transform.CompareTag("wall"))
         {
             AddReward(-0.3f);
@@ -301,7 +334,7 @@ public class CarAgent : Agent
         else if (collision.transform.CompareTag("car"))
         {
             AddReward(-0.075f);
-            isCollidingWithCar = true;
+            isCollidingWithCar = true;  // Start reducing the colliding with car timer. 
         }
         else if (collision.transform.CompareTag("bumper"))  // These are at the back of each parking spot
         {
@@ -312,18 +345,17 @@ public class CarAgent : Agent
 
     private void OnCollisionStay(Collision collision)
     {
+        // Small increment punishments for staying in collision with obstacles. 
+
         if (collision.transform.CompareTag("wall"))
         {
             AddReward(-0.005f);
         }
-        //else if (collision.transform.CompareTag("car"))
-        //{
-        //    AddReward(-0.00020f);
-        //}
         else if (collision.transform.CompareTag("car") && isCollidingWithCar)
         {
             if (timerCountdown <= 0)
             {
+                // If the agent is colliding with a car and the timer is 0, punish it and end the episode.
                 SetReward(-0.1f);
                 EndEpisode();
                 StartCoroutine(SwapMaterial(envSettings.failMat, 2.0f));
@@ -333,40 +365,51 @@ public class CarAgent : Agent
 
     private void OnCollisionExit(Collision collision)
     {
-        isCollidingWithCar = false;
+        isCollidingWithCar = false; // No longer colliding with a car. 
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        // Punishments and rewards for entering a trigger with obstacles.
+
         if (other.transform.CompareTag("yellowLine"))
         {
             AddReward(-0.05f);
         }
         else if (other.transform.CompareTag("path"))
         {
+            // If the agent hits a path, we punish and end the episode.
             GlobalStats.fail += 1;
+
             AddReward(-0.1f);
             EndEpisode();
             StartCoroutine(SwapMaterial(envSettings.failMat, 2.0f));
         }
         else if (other.transform.CompareTag("spaceCheckPoint") && !spaceCPGave)
         {
+            // If the agent goes through a checkpoint, reward them if it has not be already given.
             spaceCPGave = true;
             AddReward(0.1f);
         }
     }
 
+
     private void OnTriggerStay(Collider other)
     {
+        // Check if we have stopped within the parking space for the given time. 
         if (other.CompareTag("target") && !hasStoppedCheck)
         {
             hasStoppedCheck = true;
             StartCoroutine(HasParked());
         }
 
+        // If we have stopped for the duration required, check our orientation and angle 
+        // in relation to the parking space and apply it as a bonus to the reward. 
         if (other.CompareTag("target") && hasStopped)
         {
+            // Increase success count.
             GlobalStats.success += 1;
+
             agentParked = true;
 
             // Check orientation
@@ -390,20 +433,25 @@ public class CarAgent : Agent
         }
     }
 
+    /// <summary>
+    /// Swaps the floor material to visually indicate a success or fail, in addition to the stats UI.
+    /// </summary>
+    /// <param name="mat">The material to change the floor with.</param>
+    /// <param name="time">How long the material changes for.</param>
+    /// <returns></returns>
     IEnumerator SwapMaterial(Material mat, float time)
     {
         floorRend.material = mat;   // Swap to win or fail material
-        yield return new WaitForSeconds(time);  // Wait for 2 seconds
+        yield return new WaitForSeconds(time);  // Wait for X seconds
         floorRend.material = floorMat;  // Swap back to default material
     }
 
+    /// <summary>
+    /// Function called from the 'Menu' button within the escape menu.
+    /// Shuts down the academy, meaning it can intialise again in new scenes.
+    /// </summary>
     public void DisposeAcademy()
     {
         Academy.Instance.Dispose();
-    }
-
-    public void ResetAcademy()
-    {
-        //Academy.Instance.OnEnvironmentReset.Invoke();
     }
 }
