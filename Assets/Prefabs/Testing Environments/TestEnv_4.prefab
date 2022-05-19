@@ -437,11 +437,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed0eba588952fea43bb4a635da4c9c75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDebugging: 0
   parkingSlots: []
-  numOfCars: 0
   cars: []
   carPrefab: {fileID: 4182962856033919686, guid: b9e5eac86e3a0754490b125c786a2d5c, type: 3}
-  carsToSpawn: 0
+  carsToSpawn: 3
   target: {fileID: 0}
 --- !u!1 &5855592066054557286
 GameObject:
