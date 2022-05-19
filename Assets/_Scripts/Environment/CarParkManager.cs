@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CarParkManager : MonoBehaviour
 {
+    [Tooltip("If true, carsToSpawn uses inspector values.")]
+    public bool isDebugging = false;    // Used to test environments within the editor. 
+
     // Car Park Settings
     [Header("Car Park Settings")]
     public List<Transform> parkingSlots;    // Stores all parking spaces.
@@ -21,7 +24,8 @@ public class CarParkManager : MonoBehaviour
     {
         // Set the number of cars to spawn, 
         // based on what scenario was picked from the menu screen.
-        carsToSpawn = SceneLoader.carsToSpawn;   
+        if (!isDebugging) { carsToSpawn = SceneLoader.carsToSpawn; }
+  
     }
 
     /// <summary>

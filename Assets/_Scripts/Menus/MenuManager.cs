@@ -24,6 +24,7 @@ public class MenuManager : MonoBehaviour
     {
         // Before we return, dispose of the Academy.
         carAgent.DisposeAcademy();
+        GlobalStats.ResetStats();
         
         SceneManager.LoadScene(0);
     }

@@ -54,4 +54,15 @@ public static class GlobalStats
         if (failText == null) { failText =  GameObject.Find("FailText").gameObject.GetComponent<TextMeshProUGUI>(); }
         if (successRateText == null) { successRateText = GameObject.Find("SuccessRateText").gameObject.GetComponent<TextMeshProUGUI>(); }
     }
+
+    /// <summary>
+    /// Reset stats on scene change. 
+    /// </summary>
+    public static void ResetStats()
+    {
+        episode = 0;
+        success = 0;
+        fail = 0;
+        completedEpisodes = 0;
+    }
 }
