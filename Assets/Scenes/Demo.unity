@@ -853,6 +853,10 @@ PrefabInstance:
       value: MenuManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8001131333554322853, guid: 47131a41372b39c46b4cd3d8b72216fa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8001131333554322853, guid: 47131a41372b39c46b4cd3d8b72216fa, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
       value: 4
       objectReference: {fileID: 0}
@@ -1627,6 +1631,10 @@ PrefabInstance:
     - target: {fileID: 1610165016472251948, guid: c1a8af7c3c44ea44ca47f968f6b0cc82, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: MenuManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1610165016472251948, guid: c1a8af7c3c44ea44ca47f968f6b0cc82, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1610165016472251948, guid: c1a8af7c3c44ea44ca47f968f6b0cc82, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
@@ -6371,7 +6379,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7174894666646342310, guid: 9cb149624eb40c4418a59a31fbd20832, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9cb149624eb40c4418a59a31fbd20832, type: 3}
@@ -6950,6 +6958,10 @@ PrefabInstance:
     - target: {fileID: 6362737380097929305, guid: 1cbdf1956b26dd94c9a9d969007bb391, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: MenuManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6362737380097929305, guid: 1cbdf1956b26dd94c9a9d969007bb391, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6362737380097929305, guid: 1cbdf1956b26dd94c9a9d969007bb391, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
