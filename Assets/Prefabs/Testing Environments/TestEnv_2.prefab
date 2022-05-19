@@ -412,10 +412,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parkingSlots: []
-  numOfCars: 0
   cars: []
   carPrefab: {fileID: 4182962856033919686, guid: b9e5eac86e3a0754490b125c786a2d5c, type: 3}
-  carsToSpawn: 0
+  carsToSpawn: 6
   target: {fileID: 0}
 --- !u!1 &1757813606114767359
 GameObject:

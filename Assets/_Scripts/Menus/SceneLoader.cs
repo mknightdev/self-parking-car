@@ -6,12 +6,13 @@ using UnityEngine.SceneManagement;
 public class SceneLoader : MonoBehaviour
 {
     private static GameObject instance;
-    public static int carsToSpawn;
+    public static int carsToSpawn;  // Set within the menu. 
 
-    private CarAgent carAgent;
 
     private void Awake()
     {
+        // Persists between scenes to keep track,
+        // and get access to carsToSpawn.
         DontDestroyOnLoad(this);
 
         if (instance == null)
@@ -23,21 +24,4 @@ public class SceneLoader : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    //private void OnEnable()
-    //{
-    //    SceneManager.sceneLoaded += OnSceneLoaded;
-    //}
-
-    //void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    //{
-    //    carAgent = FindObjectOfType<CarAgent>();
-        
-    //}
-
-    //public void SetCarsValue(int numOfCars)
-    //{
-    //    carsToSpawn = numOfCars;
-    //    Debug.Log($"Set new car value. Now: {carsToSpawn}");
-    //}
 }
